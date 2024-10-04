@@ -1,39 +1,26 @@
-const express = require("express");
-const colors = require("colors");
-const cors = require("cors");
-const morgan = require("morgan");
-const dotenv=require("dotenv");
-const connectDb = require("./config/DB.JS");
+const express = require('express');
+const cors = require('cors');
+const formRoutes = require('./routes/appraisalRoutes'); 
+const auth = require('./routes/auth')
+const empRoutes = require('./routes/dashboardRouter')
+const dotenv = require('dotenv').config();
 
+const app = express(); 
+const PORT = process.env.PORT || 3003;
+const connectDb = require("./config/dbConnection")
 
-
-//dotenv configuration
-dotenv.config();
-
-//DB connection
-connectDb();
-
-//resy object
-const app = express();
-
-//middleware
 app.use(cors());
 app.use(express.json());
-app.use(morgan('dev'));
-app.use('/api/v1/auth',require('./Routes/authRoutes'));
-app.use('/api/v1/user', require('./Routes/UserRoutes'));
-app.use('/api/v1/time', require('./Routes/TimePeriodRoutes'));
 
+// app.get('/', (req, res) => {
+//   res.send('API is running...');
+// });
+app.use('/auth',auth)
+app.use('/form', formRoutes)
+app.use('/all', empRoutes)
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
 
-//PORT 
- const PORT = process.env.PORT || 3002;
+connectDb();
 
-//listen
-app.listen(PORT, (err) => {
-    if (err) {
-      console.error("Error starting server:", err);
-    } else {
-      console.log(`Server Running on ${PORT}`.bgMagenta.white);
-    }
-  });
-  

@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import logo from '../assets/logo.png'
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const [showNotificationDropdown, setShowNotificationDropdown] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const navigate = useNavigate();
 
   const notificationRef = useRef(null);
   const userRef = useRef(null);
@@ -19,6 +21,9 @@ const userInitial = username.charAt(0).toUpperCase();
       setShowUserDropdown(false);
     }
   };
+  const handleMyProfie = () =>{
+    navigate('/profile')
+  }
 
   // UseEffect to add and cleanup event listeners
   useEffect(() => {
@@ -79,7 +84,7 @@ const userInitial = username.charAt(0).toUpperCase();
           {showUserDropdown && (
             <div className="absolute top-full right-0 bg-white border border-gray-300 shadow-md z-10 w-[200px] mt-2">
               <ul className="list-none p-0 m-0">
-                <li className="p-3 text-base flex items-center cursor-pointer hover:bg-gray-200">
+                <li className="p-3 text-base flex items-center cursor-pointer hover:bg-gray-200" onClick={handleMyProfie}>
                   <i className="fas fa-user mr-3.5"></i> My Profile
                 </li>
                 <li className="p-3 text-base flex items-center cursor-pointer hover:bg-gray-200">

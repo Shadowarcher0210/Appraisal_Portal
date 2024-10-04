@@ -11,6 +11,7 @@ import Login from './components/Login.js';
 import E_Dashboard from './components/employee/E_Dashboard.js';
 import E_EmployeeDataManagement from './components/employee/E_EmployeeDataManagement.js';
 import E_PerformancePage from './components/employee/E_Performance.js';
+import Profile from './components/Profile.js';
 
 const App = () => {
   const location = useLocation();
@@ -22,6 +23,7 @@ const App = () => {
         
         <Routes>
         <Route path='/' element={<Login/>}/>
+        <Route path='/profile' element={<Profile/>}/> 
           <Route path="/home-page" element={<Homelandingpage />} />
           <Route path="/viewallappraisals" element={<Viewallappraisals />} />
           <Route path="/employee-data-management" element={<EmployeeDataManagement />} />
