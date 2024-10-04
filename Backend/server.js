@@ -21,7 +21,6 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 app.use('/api/v1/auth',require('./Routes/authRoutes'));
-app.use('/api/v1/user', require('./Routes/UserRoutes'));
 app.use('/api/v1/time', require('./Routes/TimePeriodRoutes'));
 
 
@@ -36,4 +35,5 @@ app.listen(PORT, (err) => {
       console.log(`Server Running on ${PORT}`.bgMagenta.white);
     }
   });
+  
   

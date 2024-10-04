@@ -7,21 +7,23 @@ import ConfigureAppraisalForms from './components/ConfigureAppraisalForms.js';  
 import Header from './components/Header';
 import Leftnavbar from './components/Leftnavbar';
 import Login from './components/Login.js';
+import ForgotPassword from './components/ForgotPassword.js';
+import ResetPassword from './components/ResetPassword.js';
 
 const App = () => {
   const location = useLocation();
 
-  const isLoginPage = location.pathname === '/';
+   const isAuthPage = location.pathname === '/' || location.pathname === '/forgotpassword' || location.pathname === '/resetpassword';
 
   return (
     <div className="flex">
-     
-      {!isLoginPage && <Leftnavbar />}
+      {!isAuthPage && <Leftnavbar />}
       <div className="flex-grow">
-      
-        {!isLoginPage && <Header />}
+        {!isAuthPage && <Header />}
         <Routes>
           <Route path="/" element={<Login />} />
+          <Route path="/forgotpassword" element ={<ForgotPassword/>}/>
+          <Route path="/resetpassword/:id/:token" element ={<ResetPassword/>}/>
           <Route path="/home" element={<Homelandingpage />} />
           <Route path="/viewallappraisals" element={<Viewallappraisals />} />
           <Route path="/employee-data-management" element={<EmployeeDataManagement />} />
