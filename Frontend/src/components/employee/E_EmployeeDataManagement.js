@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-const PerformancePage = () => {
+const E_EmployeeDataManagement = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [kpiRows, setKpiRows] = useState([{ kpi: '', measures: '', date: new Date(), comment: '' }]);
   const [goals, setGoals] = useState([]);
@@ -226,4 +226,4 @@ const PerformancePage = () => {
   );
 };
 
-export default PerformancePage;
+export default E_EmployeeDataManagement;

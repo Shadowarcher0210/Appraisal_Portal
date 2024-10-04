@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import goalSettingImg from '../assets/goal-setting.png';
-import evaluationImg from '../assets/evaluation.png';
-import trainingImg from '../assets/training.png';
-import growthImg from '../assets/growth.png';
+import goalSettingImg from '../../assets/goal-setting.png';
+import evaluationImg from '../../assets/evaluation.png';
+import trainingImg from '../../assets/training.png';
+import growthImg from '../../assets/growth.png';
 
 const ConfigureAppraisalForms = () => {
   const [selectedSection, setSelectedSection] = useState('Introduction');

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import logo from '../assets/logo.png';
+import logo from '../assets/logo.png'
 
 const Header = () => {
   const [showNotificationDropdown, setShowNotificationDropdown] = useState(false);
@@ -8,6 +8,8 @@ const Header = () => {
   const notificationRef = useRef(null);
   const userRef = useRef(null);
 
+  const username = localStorage.getItem('userName') || 'Naveen Pandranki'
+const userInitial = username.charAt(0).toUpperCase();
   // Function to handle clicks outside of dropdowns
   const handleClickOutside = (event) => {
     if (notificationRef.current && !notificationRef.current.contains(event.target)) {
@@ -37,11 +39,11 @@ const Header = () => {
 
       {/* Search bar */}
       <div className="header-right flex items-center ml-5">
-        <div className="search-bar flex items-center relative mr-10">
+        <div className="search-bar flex items-center relative mr-10 border-none ">
           <input
             type="text"
             placeholder="Search..."
-            className="searchbox pl-10 p-2.5 w-[400px] rounded-md"
+            className="searchbox pl-10 p-2.5 w-[400px] rounded-full   bg-slate-100"
           />
           <span className="search-icon absolute left-2.5">
             🔍
@@ -72,7 +74,7 @@ const Header = () => {
             className="text-lg flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full hover:bg-gray-300"
             onClick={() => setShowUserDropdown(prev => !prev)}
           >
-            👤
+            {userInitial}
           </button>
           {showUserDropdown && (
             <div className="absolute top-full right-0 bg-white border border-gray-300 shadow-md z-10 w-[200px] mt-2">

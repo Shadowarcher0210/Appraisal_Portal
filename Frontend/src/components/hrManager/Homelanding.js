@@ -1,6 +1,7 @@
-import Header from "./Header";
-import Leftnavbar from './Leftnavbar'
+import Header from "../Header";
+import Leftnavbar from '../Leftnavbar'
 import DataTable from "./DataTable";
+
 const Homelandingpage=() => (
     <div>
         <Header/>
