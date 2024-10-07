@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';  // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import Modal from '../hrManager/Modal';
 
 
 const ActionMenu = ({ isOpen, onClick, index }) => {
+  const navigate = useNavigate()
   return (
     <div className="relative">
-      {/* Three-dot menu icon */}
+
       <button
         className="text-xl font-bold focus:outline-none"
         onClick={onClick}
@@ -14,13 +15,12 @@ const ActionMenu = ({ isOpen, onClick, index }) => {
         •••
       </button>
 
-      {/* Dropdown menu */}
       {isOpen && (
         <div className="absolute right-0 mt-2 w-[150px] bg-white border border-gray-300 shadow-md z-10">
           <ul className="list-none p-0 m-0">
             <li
               className="p-3 text-base cursor-pointer hover:bg-gray-200"
-              onClick={() => alert(`View clicked for item ${index}`)}
+              onClick={() => navigate('/view')}
             >
               View
             </li>
@@ -40,8 +40,8 @@ const ActionMenu = ({ isOpen, onClick, index }) => {
 
 const Dashboard = () => {
   const [isModalOpen, setModalOpen] = useState(false);
-  const [openMenuIndex, setOpenMenuIndex] = useState(null); // Track the open menu index
-  const navigate = useNavigate();  // Hook for navigation
+  const [openMenuIndex, setOpenMenuIndex] = useState(null);
+  const navigate = useNavigate();
 
   const data = [
     { name: 'Renuka Kompelly', manager: 'Sobha Rani', status: 'with employee' },
@@ -58,11 +58,11 @@ const Dashboard = () => {
   };
 
   const handleMenuClick = (index) => {
-    // Toggle the clicked menu or close if already open
+
     setOpenMenuIndex(openMenuIndex === index ? null : index);
   };
 
-  // Navigate to the Configure Appraisal Forms page
+
   const handleConfigureAppraisalForms = () => {
     navigate('/configure-appraisal-forms');
   };
@@ -87,7 +87,7 @@ const Dashboard = () => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.manager}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.status}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-500 hover:text-blue-700 cursor-pointer">
-                  {/* ActionMenu with dynamic open state */}
+
                   <ActionMenu
                     isOpen={openMenuIndex === index}
                     onClick={() => handleMenuClick(index)}
@@ -98,8 +98,8 @@ const Dashboard = () => {
             ))}
           </tbody>
         </table>
-        
-        {/* Buttons below the table */}
+
+
         <div className="mt-4 flex gap-4">
           <button
             onClick={handleCreateAppraisal}
@@ -121,7 +121,7 @@ const Dashboard = () => {
           </button>
         </div>
 
-        {/* Modal for Create Appraisal */}
+
         <Modal
           isOpen={isModalOpen}
           onClose={handleCloseModal}

@@ -12,7 +12,7 @@ const E_EmployeeDataManagement = () => {
   };
 
   const handleClosePopup = () => {
-    // Save the goals from kpiRows to the goals state
+
     setGoals(kpiRows);
     setIsPopupOpen(false);
   };
@@ -51,13 +51,13 @@ const E_EmployeeDataManagement = () => {
   };
 
   const handleEditRow = (index) => {
-    // Implement your edit functionality here
+
     console.log('Edit row', index);
   };
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
-      {/* Main content wrapper */}
+
       <div className="flex-1 flex flex-col items-center p-4 mt-16 ml-24">
         <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-4xl border border-gray-300 mb-8">
           <h1 className="text-2xl font-bold mb-4">Reports</h1>
@@ -77,7 +77,7 @@ const E_EmployeeDataManagement = () => {
           </div>
         </div>
 
-        {/* Goal Library Container */}
+
         <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-4xl border border-gray-300">
           <h1 className="text-2xl font-bold mb-4">Goal Library</h1>
           <p className="mb-4">
@@ -89,7 +89,7 @@ const E_EmployeeDataManagement = () => {
           >
             Add Goal
           </button>
-          {/* Display Goals */}
+
           <div className="mt-4">
             {goals.length > 0 ? (
               <ul>
@@ -109,11 +109,10 @@ const E_EmployeeDataManagement = () => {
         </div>
       </div>
 
-      {/* Popup */}
       {isPopupOpen && (
         <div className="fixed inset-0 z-40 flex items-center justify-center overflow-auto bg-black bg-opacity-50">
           <div className="relative bg-white p-6 rounded-lg shadow-md w-full max-w-6xl h-3/4 max-h-3/4 border border-gray-300 flex flex-col">
-            {/* Sticky Heading */}
+
             <h1 className="text-2xl font-bold bg-white p-4 border-b border-gray-300 sticky top-0 z-10">Add Goal</h1>
             <div className="flex-1 overflow-auto mt-4">
               <p className="mb-4">
@@ -140,8 +139,6 @@ const E_EmployeeDataManagement = () => {
                   Specific Employee
                 </label>
               </div>
-
-              {/* KPI Table */}
               <div className="overflow-auto max-h-full mb-4">
                 <table className="w-full border border-gray-300">
                   <thead>
@@ -204,7 +201,6 @@ const E_EmployeeDataManagement = () => {
                 </button>
               </div>
             </div>
-            {/* Sticky Action Buttons */}
             <div className="flex justify-end space-x-4 bg-white border-t border-gray-300 p-4">
               <button
                 className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors duration-300"

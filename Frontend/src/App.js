@@ -12,6 +12,7 @@ import E_Dashboard from './components/employee/E_Dashboard.js';
 import E_EmployeeDataManagement from './components/employee/E_EmployeeDataManagement.js';
 import E_PerformancePage from './components/employee/E_Performance.js';
 import Profile from './components/Profile.js';
+import E_View from './components/employee/E_View.js';
 
 const App = () => {
   const location = useLocation();
@@ -29,7 +30,7 @@ const App = () => {
           <Route path="/employee-data-management" element={<EmployeeDataManagement />} />
           <Route path = "/performance-page" element={<PerformancePage/>}/>
           <Route path="/configure-appraisal-forms" element={<ConfigureAppraisalForms />} />  {/* New route */}
-
+<Route path="/view" element={<E_View/>}/>
           <Route path='employee-dashboard' element={<E_Dashboard/>}/>
           <Route path='employee-edm' element={<E_EmployeeDataManagement/>}/>
           <Route path='employee-performance' element={<E_PerformancePage/>}/>

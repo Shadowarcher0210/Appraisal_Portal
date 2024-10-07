@@ -7,18 +7,18 @@ import growthImg from '../../assets/growth.png';
 const ConfigureAppraisalForms = () => {
   const [selectedSection, setSelectedSection] = useState('Introduction');
   const [showPopup, setShowPopup] = useState(false);
-  const [showHelp, setShowHelp] = useState(false); // State to toggle help info
+  const [showHelp, setShowHelp] = useState(false);
   const [selectedOption, setSelectedOption] = useState('');
   const [goalStatement, setGoalStatement] = useState('');
-  const [goals, setGoals] = useState([]); // Store added goals
-  const [jobRoles] = useState(['Software Engineer', 'Product Manager', 'Designer']); // Example job roles
+  const [goals, setGoals] = useState([]); 
+  const [jobRoles] = useState(['Software Engineer', 'Product Manager', 'Designer']); 
 
   const handleAddGoal = () => {
     if (goalStatement) {
       setGoals([...goals, goalStatement]);
-      setGoalStatement(''); // Reset after adding
+      setGoalStatement('');
     }
-    setShowPopup(false); // Close popup
+    setShowPopup(false); 
   };
 
   const renderContent = () => {
@@ -72,16 +72,16 @@ const ConfigureAppraisalForms = () => {
             <div className="flex flex-col items-center">
               <h2 className="text-xl font-bold mb-4 flex items-center">
                 Competencies
-                {/* Help icon (question mark) */}
+               
                 <span
                   className="ml-2 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center cursor-pointer"
-                  onClick={() => setShowHelp(!showHelp)} // Toggle help popup
+                  onClick={() => setShowHelp(!showHelp)} 
                 >
                   ?
                 </span>
               </h2>
         
-              {/* Help information popup for Competencies */}
+            
               {showHelp && (
                 <div className="bg-gray-100 border border-gray-300 p-4 rounded-md shadow-md mb-4">
                   <h3 className="text-lg font-bold mb-2">Form Details</h3>
