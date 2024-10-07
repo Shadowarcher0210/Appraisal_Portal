@@ -1,27 +1,39 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom'; // Assuming you're using React Router for navigation
-import axios from 'axios'; // For API requests
+import { useNavigate } from 'react-router-dom'; 
+import axios from 'axios'; 
+
+// Function to check if the user is authenticated
+const isAuthenticated = () => {
+  const token = localStorage.getItem('token');
+  return token ? true : false;
+};
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      // Make a POST request to your login API
-      const response = await axios.post('/api/login', { email, password });
-
-      // Save the token (you can also save it in local storage)
+      // Send login request to the backend
+      const response = await axios.post('http://localhost:3003/auth/login', { email, password });
+      
+      // Store the JWT token in localStorage
       localStorage.setItem('token', response.data.token);
-      // Redirect to the user dashboard or desired page
-      history.push('/dashboard'); // Adjust the route as necessary
-    } catch (error) {
+
+      // Redirect to dashboard after successful login
+      navigate('/dashboard'); 
+    } 
+    catch (error) {
+      // Display error message if login fails
       setErrorMessage('Invalid email or password. Please try again.');
     }
+  };
+
+  const handleForgotPassword = () => {
+    navigate('/forgotpassword'); // Redirect to the Forgot Password page
   };
 
   return (
@@ -36,6 +48,7 @@ const Login = () => {
             </label>
             <input
               type="email"
+              placeholder="Enter email"
               id="email"
               className="border border-gray-300 rounded-lg p-2 w-full"
               value={email}
@@ -49,6 +62,7 @@ const Login = () => {
             </label>
             <input
               type="password"
+              placeholder="Enter password"
               id="password"
               className="border border-gray-300 rounded-lg p-2 w-full"
               value={password}
@@ -64,12 +78,12 @@ const Login = () => {
           </button>
         </form>
         <div className="mt-4 text-center">
-          <p>
-            Don't have an account?{' '}
-            <a href="/register" className="text-blue-500 hover:underline">
-              Register here
-            </a>
-          </p>
+          <button 
+            onClick={handleForgotPassword} 
+            className="text-sm text-blue-500 hover:underline"
+          >
+            Forgot Password?
+          </button>
         </div>
       </div>
     </div>
