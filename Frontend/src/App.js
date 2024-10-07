@@ -13,6 +13,8 @@ import empDataManagement from './components/employee/empDataManagement.js';
 import empPerformance from './components/employee/empPerformance.js';
 import Profile from './components/Profile.js';
 import empView from './components/employee/empView.js';
+import ForgotPassword from './components/ForgotPassword.js';
+import ResetPassword from './components/ResetPassword.js';
 
 const App = () => {
   const location = useLocation();
@@ -23,9 +25,11 @@ const App = () => {
         {location.pathname !== "/" &&<Header />}
         
         <Routes>
-        <Route path='/login' element={<Login/>}/>
-        <Route path='/profile' element={<Profile/>}/> 
-          <Route path="/" element={<Homelandingpage />} />
+         <Route path='/' element={<Login/>}/>
+         <Route path='/profile' element={<Profile/>}/> 
+         <Route path='/forgotpassword' element={<ForgotPassword/>}/> 
+         <Route path='/resetPassword/:id/:token' element={<ResetPassword/>}/> 
+          <Route path="/home" element={<Homelandingpage />} />
           <Route path="/viewallappraisals" element={<Viewallappraisals />} />
           <Route path="/empdata" element={<EmployeeDataManagement />} />
           <Route path = "/performance" element={<PerformancePage/>}/>

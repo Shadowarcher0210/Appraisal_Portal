@@ -5,17 +5,18 @@ import axios from 'axios';
 const ResetPassword = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const {id,token} = useParams();
+  const { id, token } = useParams();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(id, token); // Check if params are being populated correctly
     try {
-      const response = await axios.post(`http://localhost:3000/auth/resetPassword/${id}/${token}`, { password });
+      const response = await axios.post(`http://localhost:3003/auth/resetPassword/${id}/${token}`, { password });
       localStorage.setItem('token', response.data.token);
       navigate('/'); 
     } 
     catch (error) {
-      console.error('Error sending forgot password request', error);
+      console.error('Error:', error.response ? error.response.data : error.message);
     }
   };
 
@@ -50,4 +51,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword ;
+export default ResetPassword;

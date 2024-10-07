@@ -107,8 +107,6 @@ const loginUser = async(req,res)=>{
     }
 }
 const forgotPassword = async (req, res) => {
-  console.log("Forgot Password Endpoint Hit");
-
     try {
       const { email } = req.body;
   
@@ -171,58 +169,65 @@ const forgotPassword = async (req, res) => {
     }
   };
   const resetPassword = async (req, res) => {
-    console.log("inside reset")
-    const { id, token } = req.params;
-    const { password } = req.body;
-    console.log("resetPassword function hit", req.params, req.body);
-    console.log("resetPassword route hit", { id, token, password });   
     try {
-      // Verify the token
-      JWT.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
-        if (err) {
-          console.log("Token verification failed:", err); // Log token error
-          return res.status(401).send({
-            success: false,
-            message: "Invalid or expired token",
-          });
-        }
+      const { id, token } = req.params;
+      const { password } = req.body;
   
-        console.log("Token decoded:", decoded); // Log decoded token
-        
-        // Hash the new password
-        console.log("Preparing to hash the password");
-        const hashedPassword = await bcrypt.hash(password, 10);
-        
-        console.log("Hashed Password:", hashedPassword); // Log hashed password
-        
-        // Update the user's password in the database
-        console.log("Updating user password for user with ID:", id);
-        const user = await UserModel.findByIdAndUpdate(id, { password: hashedPassword }, { new: true });
-        
-        if (!user) {
-          console.log("User not found for ID:", id); // Log if user not found
-          return res.status(404).send({
-            success: false,
-            message: "User not found",
-          });
-        }
   
-        console.log("User password updated successfully for ID:", id); // Log if user update is successful
-        
-        // Successfully updated
-        return res.status(200).send({
-          success: true,
-          message: "Password changed successfully",
+      const decoded = JWT.verify(token, process.env.JWT_SECRET);
+  
+      if (!decoded || decoded.id !== id) {
+        return res.status(401).send({
+          success: false,
+          message: "Invalid or expired token",
         });
+      }
+  
+      
+      const hashedPassword = await bcrypt.hash(password, 10);
+  
+     
+      const updatedUser = await UserModel.findByIdAndUpdate(
+        id,
+        { password: hashedPassword },
+        { new: true } 
+      );
+  
+      if (!updatedUser) {
+        return res.status(404).send({
+          success: false,
+          message: "User not found",
+        });
+      }
+  
+      return res.status(200).send({
+        success: true,
+        message: "Password changed successfully",
       });
     } catch (error) {
-      console.error('Reset Password Error:', error); // Log any unexpected errors
+      console.error("Reset Password Error:", error);
+  
+  
+      if (error.name === "JsonWebTokenError") {
+        return res.status(400).send({
+          success: false,
+          message: "Malformed or invalid token",
+        });
+      } else if (error.name === "TokenExpiredError") {
+        return res.status(401).send({
+          success: false,
+          message: "Token has expired",
+        });
+      }
+  
+     
       return res.status(500).send({
         success: false,
-        message: "Error resetting password",
-        error
+        message: "Error resetting the password",
+        error,
       });
     }
   };
+  
   
 module.exports = {registerUser,loginUser,forgotPassword,resetPassword};

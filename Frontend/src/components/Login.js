@@ -24,7 +24,7 @@ const Login = () => {
       localStorage.setItem('token', response.data.token);
 
       // Redirect to dashboard after successful login
-      navigate('/dashboard'); 
+      navigate('/home'); 
     } 
     catch (error) {
       // Display error message if login fails
