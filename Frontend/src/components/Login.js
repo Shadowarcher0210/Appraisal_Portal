@@ -1,8 +1,14 @@
 
 
 import React, { useState } from 'react';
-import { useHistory, useNavigate } from 'react-router-dom'; // Assuming you're using React Router for navigation
-import axios from 'axios'; // For API requests
+import { useNavigate } from 'react-router-dom'; 
+import axios from 'axios'; 
+
+// Function to check if the user is authenticated
+const isAuthenticated = () => {
+  const token = localStorage.getItem('token');
+  return token ? true : false;
+};
 
 const Login = () => {
   
@@ -60,6 +66,7 @@ const Login = () => {
             </label>
             <input
               type="email"
+              placeholder="Enter email"
               id="email"
               name='email'
               className="border border-gray-300 rounded-lg p-2 w-full"
@@ -75,6 +82,7 @@ const Login = () => {
             </label>
             <input
               type="password"
+              placeholder="Enter password"
               id="password"
               name='password'
               className="border border-gray-300 rounded-lg p-2 w-full"
@@ -91,7 +99,14 @@ const Login = () => {
             Login
           </button>
         </form>
-       
+        <div className="mt-4 text-center">
+          <button 
+            onClick={handleForgotPassword} 
+            className="text-sm text-blue-500 hover:underline"
+          >
+            Forgot Password?
+          </button>
+        </div>
       </div>
     </div>
   );
