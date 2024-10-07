@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
 
 // Function to check if the user is authenticated
-const isAuthenticated = () => {
-  const token = localStorage.getItem('token');
-  return token ? true : false;
-};
+// const isAuthenticated = () => {
+//   const token = localStorage.getItem('token');
+//   return token ? true : false;
+// };
 
 const Login = () => {
   const [email, setEmail] = useState('');

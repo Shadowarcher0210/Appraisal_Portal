@@ -1,39 +1,39 @@
-import React, { useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
-import Homelandingpage from './components/Homelanding.js';
+import React from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import Homelandingpage from './components/hrManager/Homelanding.js';
 import Viewallappraisals from './components/Viewallappraisals.js';
-import EmployeeDataManagement from './components/EmployeeDataManagement.js';
-import ConfigureAppraisalForms from './components/ConfigureAppraisalForms.js';  
-import Header from './components/Header';
-import Leftnavbar from './components/Leftnavbar';
+import EmployeeDataManagement from './components/employee/empDataManagement.js';
+import ConfigureAppraisalForms from './components/hrManager/ConfigureAppraisalForms.js'; 
+import Header from './components/Header.js';
+import Leftnavbar from './components/Leftnavbar.js';
+import PerformancePage from './components/employee/empPerformance.js';
 import Login from './components/Login.js';
-import ForgotPassword from './components/ForgotPassword.js';
-
-const isAuthenticated = () => {
-  return !!localStorage.getItem('token'); // Return true if token exists
-};
+import empDashboard from './components/employee/empDashboard.js';
+import empDataManagement from './components/employee/empDataManagement.js';
+import empPerformance from './components/employee/empPerformance.js';
+import Profile from './components/Profile.js';
+import empView from './components/employee/empView.js';
 
 const App = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!isAuthenticated()) {
-      navigate('/');  
-    }
-  }, [navigate]);
-
+  const location = useLocation();
   return (
     <div className="flex">
-      <Leftnavbar />
+      {location.pathname !=="/" && <Leftnavbar />}
       <div className="flex-grow">
-        <Header />
+        {location.pathname !== "/" &&<Header />}
+        
         <Routes>
-          <Route path="/dashboard" element={<Homelandingpage />} />
-          <Route path="/" element={<Login />} />
-          <Route path="/forgotpassword" element={<ForgotPassword />} />
+        <Route path='/login' element={<Login/>}/>
+        <Route path='/profile' element={<Profile/>}/> 
+          <Route path="/" element={<Homelandingpage />} />
           <Route path="/viewallappraisals" element={<Viewallappraisals />} />
-          <Route path="/employee-data-management" element={<EmployeeDataManagement />} />
-          <Route path="/configure-appraisal-forms" element={<ConfigureAppraisalForms />} />
+          <Route path="/empdata" element={<EmployeeDataManagement />} />
+          <Route path = "/performance" element={<PerformancePage/>}/>
+          <Route path="/configure-appraisal-forms" element={<ConfigureAppraisalForms />} /> 
+           <Route path="/view" element={<empView/>}/>
+          <Route path="/employee-dashboard" element={<empDashboard/>}/>
+          <Route path="/employee-edm" element={<empDataManagement/>}/>
+          <Route path="/employee-performance" element={<empPerformance/>}/>
         </Routes>
       </div>
     </div>

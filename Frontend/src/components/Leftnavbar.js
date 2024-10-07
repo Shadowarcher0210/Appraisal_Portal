@@ -8,7 +8,7 @@ const Leftnavbar = () => {
     <div className="fixed top-0 left-0 w-24 bg-white h-[calc(100vh)] shadow-md flex flex-col items-center py-4 pt-20">
       
       {/* Dashboard Icon */}
-      <div className="nav-item flex flex-col items-center justify-center w-full h-20 group cursor-pointer" onClick={() => navigate('/dashboard')}>
+      <div className="nav-item flex flex-col items-center justify-center w-full h-20 group cursor-pointer" onClick={() => navigate('/')}>
         <div className="w-14 h-14 flex items-center justify-center text-gray-600 group-hover:text-blue-600 transition-colors duration-300">
           <svg width="64" height="60" viewBox="0 0 56 52" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M32.6666 4.9173V13.8668C32.6666 15.0802 32.6666 15.687 32.921 16.1504C33.1447 16.5581 33.5016 16.8896 33.9407 17.0973C34.4398 17.3335 35.0932 17.3335 36.4 17.3335H46.0379M37.3333 28.1666H18.6666M37.3333 36.8333H18.6666M23.3333 19.5H18.6666M32.6666 4.33331H20.5333C16.6129 4.33331 14.6528 4.33331 13.1554 5.04177C11.8382 5.66495 10.7674 6.65932 10.0963 7.88237C9.33331 9.2728 9.33331 11.093 9.33331 14.7333V37.2666C9.33331 40.907 9.33331 42.7272 10.0963 44.1176C10.7674 45.3406 11.8382 46.335 13.1554 46.9582C14.6528 47.6666 16.6129 47.6666 20.5333 47.6666H35.4666C39.387 47.6666 41.3472 47.6666 42.8446 46.9582C44.1617 46.335 45.2326 45.3406 45.9037 44.1176C46.6666 42.7272 46.6666 40.907 46.6666 37.2666V17.3333L32.6666 4.33331Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -19,7 +19,7 @@ const Leftnavbar = () => {
       <hr className="w-14 my-2 border-gray-300" />
 
       {/* EDM Icon */}
-      <div className="nav-item flex flex-col items-center justify-center w-full h-20 group cursor-pointer" onClick={() => navigate('/employee-data-management')}>
+      <div className="nav-item flex flex-col items-center justify-center w-full h-20 group cursor-pointer" onClick={() => navigate('/empdata')}>
         <div className="w-14 h-14 flex items-center justify-center text-gray-600 group-hover:text-blue-600 transition-colors duration-300">
           <svg width="60" height="58" viewBox="0 0 52 50" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M45.5 43.75H13.4333C11.0064 43.75 9.79299 43.75 8.86604 43.2959C8.05067 42.8964 7.38776 42.259 6.97231 41.475C6.5 40.5837 6.5 39.4169 6.5 37.0833V6.25M15.1667 30.2083V36.4583M24.9167 23.9583V36.4583M34.6667 17.7083V36.4583M44.4167 11.4583V36.4583" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
