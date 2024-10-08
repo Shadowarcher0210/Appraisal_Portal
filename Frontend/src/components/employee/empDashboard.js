@@ -253,7 +253,7 @@ return 'Good Evening'
     }, []);
 
   const data = [
-    { timePeriod :'01/04/2024 to 30/03/2025', joiningDate:'18/12/2023', manager: 'Sobha Rani', status: 'initiated', actions:'initiated' },
+    { empName: "Naveen Kumar", timePeriod :'01/04/2024 to 30/03/2025', joiningDate:'18/12/2023', manager: 'Sobha Rani', status: 'initiated', actions:'initiated' },
    
   ];
 
@@ -286,11 +286,12 @@ navigate('/view')
      <br>
      </br>
       
-      <div className=" w-full  p-4 bg-white border shadow-md rounded-md ml-2 mr-4">
+      <div className=" w-11/12  p-4 bg-white border shadow-md rounded-md ml-4 mr-8">
         <h2 className="text-2xl font-bold text-white bg-blue-500 p-2 rounded mb-4">Appraisals</h2>
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-100">
             <tr>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Employee Name</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Time Period</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">joining Date</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Manager</th>
@@ -301,11 +302,12 @@ navigate('/view')
           <tbody className="bg-white divide-y divide-gray-200">
             {data.map((item, index) => (
               <tr key={index} >
+                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500"onClick={handleViewPage}>{item.empName}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500"onClick={handleViewPage}>{item.timePeriod}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"onClick={handleViewPage}>{item.joiningDate}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"onClick={handleViewPage}>{item.manager}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"onClick={handleViewPage}>{item.status}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-500 hover:text-blue-700 cursor-pointer">
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500"onClick={handleViewPage}>{item.joiningDate}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500"onClick={handleViewPage}>{item.manager}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500"onClick={handleViewPage}>{item.status}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-500 hover:text-blue-700 cursor-pointer">
 
                   <ActionMenu
                     isOpen={openMenuIndex === index}

@@ -55,13 +55,14 @@ import Header from './components/Header.js';
 import Leftnavbar from './components/Leftnavbar.js';
 import PerformancePage from './components/employee/empPerformance.js';
 import Login from './components/Login.js';
-import empDashboard from './components/employee/empDashboard.js';
 import empDataManagement from './components/employee/empDataManagement.js';
 import empPerformance from './components/employee/empPerformance.js';
 import Profile from './components/Profile.js';
 import empView from './components/employee/empView.js';
 import ForgotPassword from './components/ForgotPassword.js';
 import ResetPassword from './components/ResetPassword.js';
+import Dashboard from './components/employee/empDashboard.js';
+import EmpView from './components/employee/empView.js';
 
 const App = () => {
   const location = useLocation();
@@ -90,8 +91,8 @@ const App = () => {
           <Route path="/empdata" element={<EmployeeDataManagement />} />
           <Route path="/performance" element={<PerformancePage />} />
           <Route path="/configure-appraisal-forms" element={<ConfigureAppraisalForms />} />
-          <Route path="/view" element={<empView />} />
-          <Route path="/employee-dashboard" element={<empDashboard />} />
+          <Route path="/view" element={<EmpView />} />
+          <Route path="/employee-dashboard" element={<Dashboard />} />
           <Route path="/employee-edm" element={<empDataManagement />} />
           <Route path="/employee-performance" element={<empPerformance />} />
         </Routes>

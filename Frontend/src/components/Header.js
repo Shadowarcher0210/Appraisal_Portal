@@ -79,7 +79,7 @@ const userInitial = username.charAt(0).toUpperCase();
             {userInitial}
           </button>
           {showUserDropdown && (
-            <div className="absolute top-full right-0 rounded-xl bg-white border border-gray-300 shadow-md z-10 w-[250px] mt-4">
+            <div className="absolute top-full right-0 rounded-md bg-white border border-gray-300 shadow-md z-10 w-[250px] mt-4">
               <div className='flex p-3'>
  <div className="w-8 ml-2 mr-4 space-y-2  h-8 rounded-full bg-gray-300  relative flex items-center justify-center">
             {profilePic ? (
@@ -101,8 +101,8 @@ const userInitial = username.charAt(0).toUpperCase();
                 <li className="p-3 text-base flex items-center cursor-pointer hover:bg-gray-200">
                   <i className="fas fa-lock mr-3.5"></i> Update Password
                 </li>
-                <li className="p-3 text-base text-center cursor-pointer hover:bg-blue-500 text-white bg-blue-400 rounded-md mt-2">
-                  <button className='border-1 bg-red-700 text-center rounded-md'>Logout</button>
+                <li className="p-2  m-1 mb-2 text-base text-center cursor-pointer hover:bg-blue-500 text-white bg-blue-400 rounded-md mt-2">
+                  <button className='border-1 text-center rounded-sm'>Logout</button>
                   
                 </li>
               </ul>
