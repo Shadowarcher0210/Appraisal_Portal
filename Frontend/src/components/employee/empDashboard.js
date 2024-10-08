@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../hrManager/Modal';
 
@@ -41,7 +41,39 @@ const ActionMenu = ({ isOpen, onClick, index }) => {
 const Dashboard = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [openMenuIndex, setOpenMenuIndex] = useState(null);
+  const [date,setDate]=useState(new Date());
   const navigate = useNavigate();
+  const username = localStorage.getItem('username') || "Naveen Kumar"
+  
+  const wishing =()=>{
+    const hour = date.getHours()
+    if(hour<12){
+      return 'Good Morning'
+    }
+    else if (hour < 18){
+      return 'Good Afternoon'
+    }
+    else  {
+return 'Good Evening'
+    }  }
+
+    const formatDate = (date) => {
+      const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+      return date.toLocaleDateString(undefined, options);
+    };
+  
+    const formatTime = (date) => {
+      return date.toLocaleTimeString([],{
+        hour:'2-digit',
+        minute : '2-digit',
+        hour12:true
+      }).toUpperCase();
+    };
+
+    useEffect(() => {
+      const timer = setInterval(() => setDate(new Date()), 1000);
+      return () => clearInterval(timer);
+    }, []);
 
   const data = [
     { name: 'Renuka Kompelly', manager: 'Sobha Rani', status: 'with employee' },
@@ -68,8 +100,18 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex justify-center items-start min-h-screen bg-gray-100">
-      <div className="overflow-x-auto w-full max-w-6xl p-4 bg-white rounded-lg shadow-md mt-40">
+    <div className=" justify-center items-start min-h-screen mt-20 ml-28">
+      <div>
+<label className='font-bold text-4xl w-full'>{wishing()}</label>
+<label className='ml-4 text-3xl font-bold text-orange-600'>{username},</label>
+
+<p>{formatDate(date)} <span> , </span>{formatTime(date)}</p>
+
+      </div>
+     <br>
+     </br>
+      
+      <div className=" w-full max-w-6xl p-4 bg-white rounded-lg shadow-md ">
         <h2 className="text-2xl font-bold text-white bg-blue-500 p-2 rounded mb-4">Appraisals</h2>
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-100">

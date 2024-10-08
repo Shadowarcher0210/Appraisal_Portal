@@ -10,4 +10,30 @@ const getEmployees = async(req, res) => {
         res.status(500).send('Error fetching employee data');
     }
 }
-module.exports = {getEmployees}
+const getEmpDetails = async (req, res) => {
+    try {
+        const { userId } = req.params; 
+        const user = await Employee.findById(userId, '-password');
+
+        if (!user) {
+            return res.status(404).send({
+                success: false,
+                message: 'Employee not found',
+            });
+        }
+        res.status(200).send({
+            success: true,
+            message: 'Employee details retrieved successfully',
+            user,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({
+            success: false,
+            message: 'Error fetching user details',
+            error,
+        });
+    }
+};
+
+module.exports = {getEmployees, getEmpDetails}
