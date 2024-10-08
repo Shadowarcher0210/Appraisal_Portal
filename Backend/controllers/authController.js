@@ -82,7 +82,7 @@ const loginUser = async(req,res)=>{
                 message:'Invalid Credentials'
             })
         }
-
+        
         //token
         const token = JWT.sign({id:user._id}, process.env.JWT_SECRET,{
            expiresIn : "2d",

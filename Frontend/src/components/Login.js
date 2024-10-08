@@ -17,23 +17,17 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Send login request to the backend
       const response = await axios.post('http://localhost:3003/auth/login', { email, password });
-      
-      // Store the JWT token in localStorage
       localStorage.setItem('token', response.data.token);
-
-      // Redirect to dashboard after successful login
       navigate('/home'); 
     } 
     catch (error) {
-      // Display error message if login fails
       setErrorMessage('Invalid email or password. Please try again.');
     }
   };
 
   const handleForgotPassword = () => {
-    navigate('/forgotpassword'); // Redirect to the Forgot Password page
+    navigate('/forgotpassword'); 
   };
 
   return (
