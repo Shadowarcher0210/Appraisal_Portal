@@ -5,10 +5,10 @@ const nodemailer = require('nodemailer');
 
 const registerUser = async (req, res) => {
     try {
-        const { empName, email, password, designation, gender, empType } = req.body;
+        const { empName, email, password, designation, department, gender, empType } = req.body;
 
         // Validation
-        if (!empName || !email || !password || !designation || !gender || !empType) {
+        if (!empName || !email || !password || !designation || department || !gender || !empType) {
             return res.status(500).send({
                 success: false,
                 message: 'Please provide all fields',
@@ -33,6 +33,7 @@ const registerUser = async (req, res) => {
             email,
             password: hashedPassword,
             designation,
+            department,
             gender,
             empType,
         });
@@ -82,7 +83,7 @@ const loginUser = async(req,res)=>{
                 message:'Invalid Credentials'
             })
         }
-        
+
         //token
         const token = JWT.sign({id:user._id}, process.env.JWT_SECRET,{
            expiresIn : "2d",
@@ -95,7 +96,8 @@ const loginUser = async(req,res)=>{
             user,
         })
 
-
+console.log("user",user)
+console.log("userid", user._id)
     } catch (error) {
         console.log(error);
         res.status(500).send({

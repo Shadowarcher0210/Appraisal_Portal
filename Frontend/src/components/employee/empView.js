@@ -1,6 +1,5 @@
-//view.js
-
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const TABS = [
   "Introduction",
@@ -9,6 +8,8 @@ const TABS = [
   "Performance Improvement Plan",
   "Submit",
 ];
+
+
 
 const EmpView = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -19,6 +20,24 @@ const EmpView = () => {
     const newWeights = [...weights];
     newWeights[index] = percentage;
     setWeights(newWeights);
+  };
+
+  const handleNextForm = () => {
+    if (activeTab < TABS.length - 1) {
+      setActiveTab(activeTab + 1);
+    }
+  };
+
+  const handlePreviousForm = () => {
+    if (activeTab > 0) {
+      setActiveTab(activeTab - 1);
+    }
+  };
+
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate('/employee-dashboard');
   };
 
 const instructionsList =[
@@ -53,7 +72,7 @@ const impInstructions =[
       </div>
 
       <div className="flex-1 p-8 ml-44">
-        {/* <h1 className="text-2xl font-bold mb-4">{`TABS[activeTab]`}</h1> */}
+        {/* <h1 className="text-2xl font-bold mb-4">{TABS[activeTab]}</h1> */}
         <div className="border p-4 rounded shadow-lg">
           {activeTab === 0 && ( <div>
             <div>
@@ -80,16 +99,22 @@ const impInstructions =[
                  ))}
                 </ul>
               </div>
-              <div className="flex justify-end space-x-2">
-  <button className="bg-orange-400 text-white px-4 py-2">Next form</button>
-  <button className="bg-orange-400 text-white px-4 py-2">Done</button>
+              <div className="flex justify-end space-x-2 mt-4">
+              <button className="bg-orange-400 text-white px-4 py-2 mr-auto " onClick={handleBack} >Back</button>      
+  <button className="bg-orange-400 text-white px-4 py-2 "onClick={handleNextForm}>Next form</button>
+  {/* <button className="bg-orange-400 text-white px-4 py-2">Done</button> */}
 </div>
             </div>
             {/* <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gray-200">
       <span className="text-4xl text-red-500">❗</span>
     </div> */}
                 </div>)}
-          {activeTab === 1 && <div>Content for Goals</div>}
+          {activeTab === 1 && <div>Content for Goals
+            <div className="flex justify-end space-x-2 mt-4">
+            <button className="bg-orange-400 text-white px-4 py-2 mr-auto" onClick={handlePreviousForm}>Previous form</button>      
+  <button className="bg-orange-400 text-white px-4 py-2" onClick={handleNextForm}>Next form</button>
+  {/* <button className="bg-orange-400 text-white px-4 py-2">Done</button> */}
+</div></div>}
           {activeTab === 2 && (
             <div>
               <div>
@@ -190,10 +215,25 @@ const impInstructions =[
                   </tbody>
                 </table>
               </div>
+              <div className="flex justify-end space-x-2 mt-4">
+              <button className="bg-orange-400 text-white px-4 py-2 mr-auto" onClick={handlePreviousForm}>Previous form</button>      
+  <button className="bg-orange-400 text-white px-4 py-2" onClick={handleNextForm}>Next form</button>
+  {/* <button className="bg-orange-400 text-white px-4 py-2">Done</button> */}
+</div>
             </div>
           )}
-          {activeTab === 3 && <div>Content for Performance Improvement Plan</div>}
-          {activeTab === 4 && <div>Content for Submit</div>}
+          {activeTab === 3 && <div>Content for Performance Improvement Plan 
+            <div className="flex justify-end space-x-2 mt-4">
+            <button className="bg-orange-400 text-white px-4 py-2 mr-auto" onClick={handlePreviousForm}>Previous form</button>      
+  <button className="bg-orange-400 text-white px-4 py-2" onClick={handleNextForm}>Next form</button>
+  {/* <button className="bg-orange-400 text-white px-4 py-2">Done</button> */}
+</div></div>}
+          {activeTab === 4 && <div>Content for Submit 
+            <div className="flex justify-end space-x-2 mt-4">
+            <button className="bg-orange-400 text-white px-4 py-2 mr-auto" onClick={handlePreviousForm}>Previous form</button>            
+  {/* <button className="bg-orange-400 text-white px-4 py-2" onClick={handleNextForm}>Next form</button> */}
+  <button className="bg-orange-400 text-white px-4 py-2" >Done</button>
+</div></div>}
         </div>
       </div>
     </div>

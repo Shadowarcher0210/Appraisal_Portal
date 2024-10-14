@@ -109,7 +109,7 @@ const E_PerformancePage = () => {
           <div className='ml-8 mr-8 '>
             <h2 className='font-bold text-2xl'>Appraisal</h2>
             <br></br>
-            <text className='text-sm text-slate-300 font-semibold'>Your performance appraisals for the selected time period are displayed below. Click on the View or edit appraisal button to complete your self appraisal (if applicable) or view the ratings given by your manager (once ready to be viewed)</text>
+            <text className='text-sm text-black '>Your performance appraisals for the selected time period are displayed below. Click on the View or edit appraisal button to complete your self appraisal (if applicable) or view the ratings given by your manager (once ready to be viewed)</text>
 
             <table className='border-collapse border-black rounded-t-xl w-full mt-5 '>
               <thead className='bg-blue-500 h-11 rounded-xl'>

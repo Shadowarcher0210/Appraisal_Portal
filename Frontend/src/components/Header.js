@@ -3,18 +3,22 @@
 import React, { useState, useRef, useEffect } from 'react';
 import logo from '../assets/logo.png'
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'
 
 const Header = () => {
   const [showNotificationDropdown, setShowNotificationDropdown] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
-  const [profilePic, setProfilePic] = useState(null);
+  const [userInitial, setuserInitial] = useState(null);
+  const [userData, setUserData] = useState(null);
+
   const navigate = useNavigate();
 
   const notificationRef = useRef(null);
   const userRef = useRef(null);
+  const employeeName = localStorage.getItem('empName')
 
-  const username = localStorage.getItem('userName') || 'Naveen Pandranki'
-const userInitial = username.charAt(0).toUpperCase();
+
+  //const username = localStorage.getItem('userName') || 'Naveen Pandranki'
 
   const handleClickOutside = (event) => {
     if (notificationRef.current && !notificationRef.current.contains(event.target)) {
@@ -27,6 +31,30 @@ const userInitial = username.charAt(0).toUpperCase();
   const handleMyProfie = () =>{
     navigate('/profile')
   }
+
+  const userDetails = async () => {
+    const userId = localStorage.getItem('userId');
+    console.log("Retrieved userId:", userId);
+    if (userId) {
+        try {
+            const response = await axios.get(`http://localhost:3003/all/details/${userId}`);
+            setUserData(response.data);
+            console.log("userdata", response.data); 
+            setuserInitial(employeeName.charAt(0).toUpperCase())
+        } catch (error) {
+            console.error('Error fetching user details:', error);
+        }
+    } else {
+        console.log('User ID not found in local storage.');
+    }
+};
+//const userInitial = userData.empName.charAt(0).toUpperCase();
+
+useEffect(() => {
+  console.log("useEffect called to fetch user details");
+
+  userDetails();
+}, []); 
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
@@ -72,25 +100,24 @@ const userInitial = username.charAt(0).toUpperCase();
         </div>
 
         <div className="relative" ref={userRef}>
-          <button
+       <button
             className="text-lg flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full hover:bg-gray-300"
             onClick={() => setShowUserDropdown(prev => !prev)}
-          >
-            {userInitial}
+          >    {userInitial}
           </button>
           {showUserDropdown && (
             <div className="absolute top-full right-0 rounded-md bg-white border border-gray-300 shadow-md z-10 w-[250px] mt-4">
               <div className='flex p-3'>
  <div className="w-8 ml-2 mr-4 space-y-2  h-8 rounded-full bg-gray-300  relative flex items-center justify-center">
-            {profilePic ? (
-              <img src={profilePic} alt="Profile" className="w-8 h-8 object-contain" />
+            {userData ? (
+              <img src={userData.user.profile} alt="Profile" className="w-8 h-8 object-contain" />
             ) : (
               <span className="text-4xl text-gray-500">👤</span>
             )}
             </div>
             <div>
-            <label className='mt-2'>Naveen Kumar</label>
-            <p>Information Tech</p>
+            <label className='mt-2'>{userData.user.empName}</label>
+            <p>{userData.user.designation}</p>
             </div>
               </div>
               <hr></hr>
@@ -103,7 +130,6 @@ const userInitial = username.charAt(0).toUpperCase();
                 </li>
                 <li className="p-2  m-1 mb-2 text-base text-center cursor-pointer hover:bg-blue-500 text-white bg-blue-400 rounded-md mt-2">
                   <button className='border-1 text-center rounded-sm'>Logout</button>
-                  
                 </li>
               </ul>
             </div>

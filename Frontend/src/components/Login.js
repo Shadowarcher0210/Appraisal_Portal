@@ -18,8 +18,15 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:3003/auth/login', { email, password });
+     
+      const {  token, user } = response.data;
+      console.log('Token:', token);
+      console.log('User Info:', user);
+
+      localStorage.setItem('userId', user._id.toString());
       localStorage.setItem('token', response.data.token);
-      navigate('/home'); 
+      localStorage.setItem('empName',user.empName)
+      navigate('/employee-dashboard'); 
     } 
     catch (error) {
       setErrorMessage('Invalid email or password. Please try again.');
