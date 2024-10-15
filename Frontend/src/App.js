@@ -63,6 +63,7 @@ import ForgotPassword from './components/ForgotPassword.js';
 import ResetPassword from './components/ResetPassword.js';
 import Dashboard from './components/employee/empDashboard.js';
 import EmpView from './components/employee/empView.js';
+//import Competencies from './components/employee/Competencies.js'
 
 const App = () => {
   const location = useLocation();
@@ -95,6 +96,7 @@ const App = () => {
           <Route path="/employee-dashboard" element={<Dashboard />} />
           <Route path="/employee-edm" element={<empDataManagement />} />
           <Route path="/employee-performance" element={<empPerformance />} />
+          {/* <Route path="/Competencies" element={<Competencies />} /> */}
         </Routes>
       </div>
     </div>
