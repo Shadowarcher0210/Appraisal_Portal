@@ -16,9 +16,9 @@ const getAppraisalsByDateRange = async (req, res) => {
         {
             $project: {
               empName: 1,
-              timePeriodStartYear: { $year: { $arrayElemAt: ['$timePeriod', 0] } }, // Extract year from start date
-              timePeriodEndYear: { $year: { $arrayElemAt: ['$timePeriod', 1] } },   // Extract year from end date
-              timePeriod: 1, // Include the full timePeriod for reference
+              timePeriodStartYear: { $year: { $arrayElemAt: ['$timePeriod', 0] } }, 
+              timePeriodEndYear: { $year: { $arrayElemAt: ['$timePeriod', 1] } },  
+              timePeriod: 1, 
               managerName: 1,
             //   depName: 1,
               empScore: 1,
@@ -27,8 +27,8 @@ const getAppraisalsByDateRange = async (req, res) => {
           },
           {
             $match: {
-              timePeriodStartYear: { $gte: startYear, $lte: endYear }, // Start date within range
-              timePeriodEndYear: { $gte: startYear, $lte: endYear },   // End date within range
+              timePeriodStartYear: { $gte: startYear, $lte: endYear }, 
+              timePeriodEndYear: { $gte: startYear, $lte: endYear },  
             },
           },
         ]);
