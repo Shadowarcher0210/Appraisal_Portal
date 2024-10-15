@@ -5,10 +5,10 @@ const nodemailer = require('nodemailer');
 
 const registerUser = async (req, res) => {
     try {
-        const { empName, email, password, designation, department, gender, empType } = req.body;
+        const { empName, email, password, doj, designation, department,band, gender, empType } = req.body;
 
         // Validation
-        if (!empName || !email || !password || !designation || department || !gender || !empType) {
+        if (!empName || !email || !password || !doj || !designation || !department || !band || !gender || !empType) {
             return res.status(500).send({
                 success: false,
                 message: 'Please provide all fields',
@@ -32,8 +32,10 @@ const registerUser = async (req, res) => {
             empName,
             email,
             password: hashedPassword,
+            doj,
             designation,
             department,
+            band,
             gender,
             empType,
         });
