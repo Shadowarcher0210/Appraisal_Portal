@@ -23,16 +23,16 @@ const registerUser = async (req, res) => {
             });
         }
 
-        // Hashing the password
         var salt = bcrypt.genSaltSync(10);
         const hashedPassword = await bcrypt.hash(password, salt);
+       
+       const formattedDoj = new Date(doj).toISOString().split('T')[0];
 
-        // Create new user
         const user = await UserModel.create({
             empName,
             email,
             password: hashedPassword,
-            doj,
+            doj: formattedDoj,
             designation,
             department,
             band,

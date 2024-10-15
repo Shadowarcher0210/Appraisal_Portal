@@ -1,8 +1,8 @@
 const express = require('express');
-const { timePeriod} = require('../controllers/timePeriodController');
+const { getAppraisalsByDateRange } = require('../controllers/timePeriodController');
 
 const router = express.Router();
 
-router.get('/getTime',timePeriod);
+router.get('/getTime',getAppraisalsByDateRange);
 
 module.exports = router;

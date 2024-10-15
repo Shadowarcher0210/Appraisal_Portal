@@ -15,7 +15,7 @@ const userSchema = new mongose.Schema(
             required:[true,'password is required'],
         },
         doj: {
-          type: Date,
+          type: String,
           required:[true,'date is required'],
         },
         designation:{

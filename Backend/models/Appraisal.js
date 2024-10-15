@@ -32,11 +32,20 @@ const appraisalSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        pageData: {
-            type: Map, 
-            of: Object,
-            required: false
-          }
+        pageData: [{
+            questionId: {
+                type: String,
+                required: true
+            },
+            questionText: {
+                type: String
+            },
+            answer: {
+                type: String,
+                required: true,
+                // enum: ["strongly disagree", "somewhat disagree", "agree", "somewhat agree", "strongly agree"] // Allowed options
+            }
+        }]
     }
 )
 

@@ -8,5 +8,4 @@ router.post('/save',authenticateUser,saveAppraisal)
 router.get('/display/:userId', getAppraisals);
 
 
-
 module.exports = router;
