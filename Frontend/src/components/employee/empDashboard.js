@@ -58,22 +58,33 @@ const Dashboard = () => {
   const goalSettingDueDate = new Date(`${currentYear + 1}-03-15`);
   const goalSettingVisibleStart = new Date(`${currentYear + 1}-03-01`);
 
-  const navigate = useNavigate();
-
   const fetchAppraisalDetails = async () => {
     const userId = localStorage.getItem('userId');
     if (userId) {
-      try {
-        const response = await axios.get(`http://localhost:3003/form/display/${userId}`);
-        setUserData(response.data);
-        console.log("userdata",userData)
-      } catch (error) {
-        console.error('Error fetching user details:', error);
-      }
+        try {
+            const response = await axios.get(`http://localhost:3003/form/display/${userId}`);
+
+            const currentYear = new Date().getFullYear();
+            const sortedData = response.data
+                .filter(appraisal => {
+                    const startYear = parseInt(appraisal.timePeriod[0]);
+                    return startYear >= currentYear && startYear <= currentYear + 1; 
+                })
+                .sort((a, b) => {
+                    const startYearA = parseInt(a.timePeriod[0]);
+                    const startYearB = parseInt(b.timePeriod[0]);
+                    return startYearA - startYearB; 
+                });
+
+            setUserData(sortedData); 
+            console.log("userdata", sortedData); 
+        } catch (error) {
+            console.error('Error fetching user details:', error);
+        }
     } else {
-      console.log('User ID not found in local storage.');
+        console.log('User ID not found in local storage.');
     }
-  };
+};
 
   useEffect(() => {
     fetchAppraisalDetails();
@@ -108,7 +119,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="justify-center items-start mt-20 ml-28">
+    <div className="justify-center items-start mt-20 ml-28 ">
       <div>
       <label className='font-bold text-4xl w-full ml-2 mb-4'>{wishing()}</label>
             <label className='ml-2 text-3xl font-bold text-orange-600'>
@@ -120,17 +131,19 @@ const Dashboard = () => {
       </div>
       <br />
       
-      <div className="w-11/12 p-4 bg-white border shadow-md rounded-md ml-4 mr-8">
-        <h2 className="text-2xl font-bold text-white bg-blue-500 p-2 rounded mb-4">Appraisals</h2>
+      <div className="w-12/12 p-4 bg-white border shadow-md rounded-md ml-4 mr-8">
+        <h2 className="text-2xl font-bold text-white bg-blue-500 p-2 rounded mb-4">Appraisal</h2>
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-100">
-            <tr>
+            <tr className=''>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Employee name</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Time Period</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Initiated On</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider ">Band</th>
+             
+              <th className="px-6 py-3 text-center text-xs font-medium text-gray-700 uppercase tracking-wider">Assesment year</th>
+              <th className="px-6 py-3 text-center text-xs font-medium text-gray-700 uppercase tracking-wider">Initiated On</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Manager name</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Actions</th>
+              <th className="px-6 py-3 text-center text-xs font-medium text-gray-700 uppercase tracking-wider">Status</th>
+              <th className="px-6 py-3 text-center text-xs font-medium text-gray-700 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -138,12 +151,13 @@ const Dashboard = () => {
                userData.map((appraisal, index) => (
                <tr key={index}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{appraisal.empName}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500 text-center">{appraisal.band}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500 text-center">
                       {appraisal.timePeriod[0]} - {appraisal.timePeriod[1]}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{appraisal.initiatedOn}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500 text-center">{appraisal.initiatedOn}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{appraisal.managerName}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{appraisal.status}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500 text-center">{appraisal.status}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-500 hover:text-blue-700 cursor-pointer">
                       <ActionMenu
                           isOpen={openMenuIndex === index}

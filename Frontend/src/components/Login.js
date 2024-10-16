@@ -2,11 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import axios from 'axios'; 
 
-// Function to check if the user is authenticated
-// const isAuthenticated = () => {
-//   const token = localStorage.getItem('token');
-//   return token ? true : false;
-// };
+
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -36,6 +32,8 @@ const Login = () => {
   const handleForgotPassword = () => {
     navigate('/forgotpassword'); 
   };
+
+ 
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">

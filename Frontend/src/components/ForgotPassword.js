@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+ 
 import axios from 'axios'; 
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [emailSent, setEmailSent] = useState(false); 
-    const navigate = useNavigate();
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();

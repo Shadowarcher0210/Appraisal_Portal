@@ -31,6 +31,10 @@ const Header = () => {
   const handleMyProfie = () =>{
     navigate('/profile')
   }
+  const handleLogot=()=>{
+    localStorage.clear();
+    navigate('/')
+  }
 
   const userDetails = async () => {
     const userId = localStorage.getItem('userId');
@@ -48,13 +52,7 @@ const Header = () => {
         console.log('User ID not found in local storage.');
     }
 };
-//const userInitial = userData.empName.charAt(0).toUpperCase();
-
-useEffect(() => {
-  console.log("useEffect called to fetch user details");
-
   userDetails();
-}, []); 
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
@@ -129,7 +127,7 @@ useEffect(() => {
                   <i className="fas fa-lock mr-3.5"></i> Update Password
                 </li>
                 <li className="p-2  m-1 mb-2 text-base text-center cursor-pointer hover:bg-blue-500 text-white bg-blue-400 rounded-md mt-2">
-                  <button className='border-1 text-center rounded-sm'>Logout</button>
+                  <button className='border-1 text-center rounded-sm' onClick={handleLogot}>Logout</button>
                 </li>
               </ul>
             </div>
