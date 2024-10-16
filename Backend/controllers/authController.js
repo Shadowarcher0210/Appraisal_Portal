@@ -5,10 +5,10 @@ const nodemailer = require('nodemailer');
 
 const registerUser = async (req, res) => {
     try {
-        const { empName, email, password, doj, designation, department,band, gender, empType } = req.body;
+        const { empName, email, password, doj, designation, department,band, gender, empType} = req.body;
 
         // Validation
-        if (!empName || !email || !password || !doj || !designation || !department || !band || !gender || !empType) {
+        if (!empName || !email || !password || !doj || !designation || !department || !band || !gender || !empType ) {
             return res.status(500).send({
                 success: false,
                 message: 'Please provide all fields',
@@ -38,6 +38,7 @@ const registerUser = async (req, res) => {
             band,
             gender,
             empType,
+           
         });
 
         res.status(201).send({
@@ -141,8 +142,8 @@ const forgotPassword = async (req, res) => {
       const mailOptions = {
         from: process.env.EMAIL_USER,
         to: email,
-        subject: 'Reset your password',
-        text: `http://localhost:3000/resetPassword/${user._id}/${token}`,
+        subject: 'Reset Your Password',
+        text: `Hello ${user.empName},\n\nWe received a request to reset your password. If you initiated this request, please click the link below to reset your password:http://localhost:3000/resetPassword/${user._id}/${token}\n\nIf you did not request a password reset, please ignore this email, and no changes will be made to your account.\n\nThanks & Regards,\nBlueSpire `,
       };
   
       // Send email

@@ -1,6 +1,5 @@
 const Appraisal = require('../models/Appraisal');
 
-// Get users by date of joining between startDate and endDate
 const getAppraisalsByDateRange = async (req, res) => {
     const { startDate, endDate } = req.body;
   
