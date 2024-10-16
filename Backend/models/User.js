@@ -22,6 +22,14 @@ const userSchema = new mongose.Schema(
           type:String,
           required:[true,'Designation is required'],
         },
+        department:{
+          type:String,
+          required:[true,'department is required'],
+        },
+        band:{
+          type:String,
+          required:[true,'department is required'],
+        },
         gender:{
           type:String,
           require:[true,'gender is required'],
@@ -32,6 +40,8 @@ const userSchema = new mongose.Schema(
           default:'Employee',
           enum:['HR','Manager','Employee'],
         },
+
+        
         profile:{
           type:String,
           default:'https://img.freepik.com/free-icon/user_318-522233.jpg',
