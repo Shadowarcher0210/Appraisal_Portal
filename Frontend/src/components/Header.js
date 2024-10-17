@@ -71,7 +71,7 @@ useEffect(() => {
       </div>
 
       <div className="header-right flex items-center ml-5">
-        <div className="search-bar flex items-center relative mr-10 border-none ">
+        {/* <div className="search-bar flex items-center relative mr-10 border-none ">
           <input
             type="text"
             placeholder="Search..."
@@ -80,7 +80,7 @@ useEffect(() => {
           <span className="search-icon absolute left-2.5">
             🔍
           </span>
-        </div>
+        </div> */}
 
         <div className="relative mr-10" ref={notificationRef}>
           <button

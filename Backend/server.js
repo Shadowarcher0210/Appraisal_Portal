@@ -1,22 +1,20 @@
 const express = require('express');
 const cors = require('cors');
-const formRoutes = require('./routes/appraisalRoutes'); 
 const auth = require('./routes/auth')
-const empRoutes = require('./routes/dashboardRouter')
 const dotenv = require('dotenv').config();
-
 const app = express(); 
 const PORT = process.env.PORT || 3003;
 const connectDb = require("./config/dbConnection");
+
+const formRoutes = require('./routes/appraisalRoutes'); 
+const empRoutes = require('./routes/dashboardRouter')
 const timePeriod  = require('./routes/timePeriod');
 const uploadAppraisalLetter  = require('./routes/uploadRouter');
 
 app.use(cors());
 app.use(express.json());
 
-// app.get('/', (req, res) => {
-//   res.send('API is running...');
-// });
+
 app.use('/auth',auth)
 app.use('/form', formRoutes)
 app.use('/all', empRoutes)

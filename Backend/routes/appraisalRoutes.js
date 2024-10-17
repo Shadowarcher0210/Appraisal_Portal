@@ -5,6 +5,8 @@ const {authenticateUser} = require('../middleware/authenticateUser')
 const router = express.Router()
 
 router.post('/save',authenticateUser,saveAppraisal)
+// router.post('/saveDetails/:userId',authenticateUser,saveAppraisalDetails)
+
 router.get('/display/:userId', getAppraisals);
 
 

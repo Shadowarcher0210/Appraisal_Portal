@@ -21,6 +21,7 @@ const saveAppraisal = async(req, res) => {
         const formatDateOnly = (date) => {
             return new Date(date).toISOString().split('T')[0];
         };
+        
         const startDate = formatDateOnly(initiatedOn);
         const endDate = formatDateOnly(new Date(initiatedOn).setFullYear(new Date(initiatedOn).getFullYear() + 1));
         const newForm = new Appraisal({
@@ -61,6 +62,46 @@ const saveAppraisal = async(req, res) => {
         });
     }
 }
+
+// const saveAppraisalDetails = async(req, res) => {
+//     const { pageData } = req.body;
+//     const { userId } = req.params;  
+
+//     try {
+//         console.log("userid", userId);
+//         if (!userId) {
+//             return res.status(400).send({ error: 'User ID is required' });
+//         }
+
+//         const user = await User.findOne({ _id: userId }, { empName: 1 });
+//         if (!user) {
+//             return res.status(404).send({ error: 'User not found' });
+//         }
+
+     
+//         const newForm = new Appraisal({
+//             userId,
+//             pageData: pageData.map(({ questionId, answer }) => ({
+//                 questionId,
+//                 answer,
+//             }))
+//         });
+
+//         const savedForm = await newForm.save();
+
+//         res.status(201).send({
+//             message: 'Appraisal form saved successfully!',
+//             userId: savedForm.userId,
+//             pageData: savedForm.pageData
+//         });
+//     } catch (error) {
+//         console.log('Error saving appraisal form', error);
+//         res.status(500).send({
+//             success: false,
+//             error: error.message
+//         });
+//     }
+// };
 
 
 const getAppraisals = async (req, res) => {

@@ -10,11 +10,11 @@ const applications = [
   { id: 5, timePeriod: '01/04/2024 to 31/03/2025', manager: 'Kiran', createdDate: '2024-04-05' },
 ];
 
-const getAcademicYearRange = (year) => {
-  const start = new Date(year, 3, 1);
-  const end = new Date(year + 1, 2, 31, 23, 59, 59, 999);
-  return { start, end };
-};
+// const getAcademicYearRange = (year) => {
+//   const start = new Date(year, 3, 1);
+//   const end = new Date(year + 1, 2, 31, 23, 59, 59, 999);
+//   return { start, end };
+// };
 
 const ActionMenu = ({ isOpen, onClick, index }) => {
   return (
@@ -45,8 +45,10 @@ const E_PerformancePage = () => {
   const [academicYears, setAcademicYears] = useState([]);
   const [openMenuIndex, setOpenMenuIndex] = useState(null);
   const [file, setFile] = useState(null); 
-  const [loading, setLoading] = useState(false);
-  const [uploadStatus, setUploadStatus] = useState(null); 
+  // const [loading, setLoading] = useState(false);
+  // const [uploadStatus, setUploadStatus] = useState(null); 
+  const [userData, setUserData] = useState(null);
+  const employeeName = localStorage.getItem('empName');
 
   useEffect(() => {
     const currentYear = new Date().getFullYear();
@@ -61,174 +63,144 @@ const E_PerformancePage = () => {
     setSelectedYear(`${defaultYear}-${defaultYear + 1}`);
   }, []);
 
-  const handleMenuClick = (index) => {
-    setOpenMenuIndex(openMenuIndex === index ? null : index);
-  };
+  // const handleMenuClick = (index) => {
+  //   setOpenMenuIndex(openMenuIndex === index ? null : index);
+  // };
 
-  useEffect(() => {
-    if (selectedYear) {
-      const startYear = parseInt(selectedYear.split('-')[0], 10);
-      const { start, end } = getAcademicYearRange(startYear);
-      const filtered = applications.filter((app) => {
-        const appDate = new Date(app.createdDate);
-        return appDate >= start && appDate <= end;
-      });
+  // useEffect(() => {
+  //   if (selectedYear) {
+  //     const startYear = parseInt(selectedYear.split('-')[0], 10);
+  //     const { start, end } = getAcademicYearRange(startYear);
+  //     const filtered = applications.filter((app) => {
+  //       const appDate = new Date(app.createdDate);
+  //       return appDate >= start && appDate <= end;
+  //     });
 
-      setFilteredApps(filtered);
-    }
-  }, [selectedYear]);
+  //     setFilteredApps(filtered);
+  //   }
+  // }, [selectedYear]);
 
-  const uploadLetter = async () => {
+
+  const fetchAppraisalDetails = async (selectedYear) => {
+    console.log("Fetching data for year:", selectedYear);
     const userId = localStorage.getItem('userId');
-    console.log("Retrieved userId:", userId);
-
     if (userId) {
+      const startYear = parseInt(selectedYear.split('-')[0], 10);
+      const endYear = startYear + 1;
+      
+      const startDate = new Date(`${startYear}-03-01`).toISOString().split('T')[0];  
+      const endDate = new Date(`${endYear}-04-30`).toISOString().split('T')[0];     
+ 
+      
       try {
-        const response = await axios.get('http://localhost:3003/letter/upload');
-        console.log("response", response.data);
+        const response = await axios.get(`http://localhost:3003/time/getTime/${startDate}/${endDate}`, {    
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        const formattedUserData = response.data.map(item => ({
+          ...item,
+          timePeriod: item.timePeriod.map(date => date.split('T')[0]),
+      }));
+
+      setUserData(formattedUserData);
+      
+      console.log("userdata", formattedUserData);  
+      console.log("userdata", userData);
       } catch (error) {
-        console.error('Error in uploading:', error);
+        console.error('Error fetching user details:', error);
       }
     } else {
       console.log('User ID not found in local storage.');
     }
   };
-
   useEffect(() => {
-    console.log("useEffect called to post letter");
-    uploadLetter();
-  }, []);
-
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setFile(file); 
-     // handleFileUpload(file);
+    if (selectedYear) {
+      fetchAppraisalDetails(selectedYear);
     }
-};
+  }, [selectedYear]);
 
-  const handleFileUpload = async () => {
-    const token = localStorage.getItem('token'); 
-    const formData = new FormData();
-    formData.append('appraisalLetter', file); 
-    setLoading(true);
-    try {
-      const response = await axios.put(`http://localhost:3003/letter/upload`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      console.log('File uploaded successfully:', response.data);
-      setUploadStatus('File uploaded successfully!');
-      setFile(null);
-
-    } catch (error) {
-      console.error('Error uploading file:', error);
-      setUploadStatus('Error uploading file. Please try again.'); 
-    }  finally {
-      setLoading(false); 
-    }
+ 
+  const handleMenuClick = (index) => {
+    setOpenMenuIndex(openMenuIndex === index ? null : index);
   };
-  // useEffect(() => {
-  //   if (file) {
-  //     handleFileUpload(); // Call the upload function
-  //   }
-  // }, [file]);
 
+  const handleYearChange = (e) => {
+    const year = e.target.value;
+    setSelectedYear(year);
+    fetchAppraisalDetails(year); 
+    console.log("Selected Year:", e.target.value);
+  };
+  
   return (
     <div className='ml-28 mt-20'>
       <div>
         <div>
-          <label className='ml-6 pl-4 border-gray-100 rounded-lg py-1 p-1 bg-slate-100'>
-            <label htmlFor="time-period" className=''>Time Period : </label>
-            <select
-              id="time-period"
-              value={selectedYear}
-              className='p-1 bg-gray-100 rounded-lg'
-              onChange={(e) => setSelectedYear(e.target.value)}
-            >
-              {academicYears.map((year) => (
-                <option key={year} value={year}>
-                  {year}
-                </option>
-              ))}
-            </select>
-          </label>
-
+        <label className='ml-6 pl-4 rounded-lg py-1 p-1 bg-slate-100'>
+          <span htmlFor="time-period">Time Period:</span> 
+          <select
+            id="time-period"
+            value={selectedYear}
+            className='p-1 mb-10 bg-gray-100 rounded-lg'
+            onChange={handleYearChange}
+          >
+            {academicYears.map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+        </label>
           <br />
-          <br />
-          <div className='ml-8 mr-8 '>
-            <h2 className='font-bold text-2xl'>Appraisal</h2>
-            <br />
-            <text className='text-sm text-black '>Your performance appraisals for the selected time period are displayed below. Click on the View or edit appraisal button to complete your self appraisal (if applicable) or view the ratings given by your manager (once ready to be viewed)</text>
-
-            <table className='border-collapse border-black rounded-t-xl w-full mt-5 '>
-              <thead className='bg-blue-500 h-11 rounded-xl'>
-                <tr className='rounded-t-lg'>
-                  <th className='w-1/4'>Time Period</th>
-                  <th className='w-1/4'>Manager</th>
-                  <th className='w-1/4'>Status</th>
-                  <th className='w-1/4'>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredApps.length > 0 ? (
-                  filteredApps.map((app, index) => (
-                    <tr key={app.id} className="bg-gray-100 border-b border-gray-200 ">
-                      <td className="py-3 px-4 text-center">{app.timePeriod}</td>
-                      <td className='py-3 px-4 text-center'>{app.manager}</td>
-                      <td className='py-3 px-4 text-center'>{app.status}</td>
-                      <td className="py-3 px-4 text-center"> 
-                        <ActionMenu
-                          isOpen={openMenuIndex === index}
-                          onClick={() => handleMenuClick(index)}
-                          index={index}
-                        />
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="2" className="py-3 px-4 text-center text-gray-500">
-                      No applications found for the selected academic year.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
+     
+   <div className="w-11/12 p-4 bg-white border shadow-md rounded-md ml-4 mr-8">
+      <h2 className="text-2xl font-bold text-white bg-blue-500 p-2 rounded mb-4">Appraisals</h2>
+      <table className="min-w-full divide-y divide-gray-200">
+        <thead className="bg-gray-100">
+          <tr>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Employee name</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Time Period</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Initiated On</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Manager name</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Status</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {userData && userData.length > 0 ? (
+            userData.map((appraisal, index) => (
+              <tr key={appraisal.userId}>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{employeeName}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
+                {appraisal.timePeriod && appraisal.timePeriod.length === 2
+                  ? `${appraisal.timePeriod[0]} - ${appraisal.timePeriod[1]}` : 'N/A'}      
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{appraisal.timePeriod[0]}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{appraisal.managerName}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{appraisal.status}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-500 hover:text-blue-700 cursor-pointer">
+                  <ActionMenu
+                    isOpen={openMenuIndex === index}
+                    onClick={() => handleMenuClick(index)}
+                    index={index}
+                  />
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="6" className="px-6 py-4 text-center text-sm text-gray-500">
+                No appraisals found for this user.
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
         <br />
         <br />
-        <div>
-          <h2 className='font-bold text-xl ml-10'>Appraisal Letters</h2>
-          <div className="mr-8 p-6 ml-8 mt-6 bg-white border border-gray-200 shadow-lg rounded-lg">
-            <p className="text-sm text-gray-600 mb-6">Please upload your appraisal letter in PDF, DOC, or DOCX format. Make sure the file size is less than 10MB.</p>
-            
-            <div className="flex items-center justify-between">
-              <label className="block">
-                <span className="sr-only">Choose File</span>
-                <input type="file" onChange={handleFileChange} />
-              </label>
-              <button
-                onClick={handleFileUpload}
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                disabled={!file || loading}
-              >
-            {loading ? 'Uploading...' : 'Upload'}
-            </button>
-            </div>
-            {file && (
-          <p className="mt-4 text-sm text-gray-700">Selected file: {file.name}</p>
-            )} 
-             {uploadStatus && (
-          <p className="mt-4 text-sm text-red-500">{uploadStatus}</p>
-             )}
-          </div>
-        </div>
       </div>
+    </div>
     </div>
   );
 };

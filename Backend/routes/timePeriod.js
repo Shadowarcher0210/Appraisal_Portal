@@ -3,6 +3,6 @@ const { getAppraisalsByDateRange } = require('../controllers/timePeriodControlle
 
 const router = express.Router();
 
-router.get('/getTime',getAppraisalsByDateRange);
+router.get('/getTime/:startDate/:endDate',getAppraisalsByDateRange);
 
 module.exports = router;

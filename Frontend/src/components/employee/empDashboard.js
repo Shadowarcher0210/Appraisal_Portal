@@ -126,7 +126,9 @@ const Dashboard = () => {
           <thead className="bg-gray-100">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Employee name</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Time Period</th>
+              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Band</th> */}
+
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Assessment Year</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Initiated On</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Manager name</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Status</th>
@@ -138,6 +140,8 @@ const Dashboard = () => {
                userData.map((appraisal, index) => (
                <tr key={index}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{appraisal.empName}</td>
+                  {/* <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{appraisal.band}</td> */}
+
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
                       {appraisal.timePeriod[0]} - {appraisal.timePeriod[1]}
                   </td>
@@ -161,28 +165,7 @@ const Dashboard = () => {
         </tr>
     )}
 
-              {/* {userData ? (
-                userData.map((appraisal, index) => (
-                    <div key={index} className="appraisal">
-                        <h3>Appraisal for {appraisal.empName}</h3>
-                        <p><strong>Time Period:</strong> {appraisal.timePeriod.join(' to ')}</p>
-                        <p><strong>Initiated On:</strong> {appraisal.initiatedOn}</p>
-                        <p><strong>Manager Name:</strong> {appraisal.managerName}</p>
-                        <p><strong>Department:</strong> {appraisal.depName}</p>
-                        <p><strong>Employee Score:</strong> {appraisal.empScore}</p>
-                        <p><strong>Status:</strong> {appraisal.status}</p>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-500 hover:text-blue-700 cursor-pointer">
-                      <ActionMenu
-                          isOpen={openMenuIndex === index}
-                          onClick={() => handleMenuClick(index)}
-                          index={index}
-                      />
-                  </td>
-                    </div>
-                ))
-            ) : (
-                <p>No appraisals found for this user.</p>
-            )} */}
+            
           </tbody>
         </table>
         <Modal
@@ -191,21 +174,7 @@ const Dashboard = () => {
         />
 
       </div>
-{/*       
-      <div className="mt-8 ml-4 mr-28 p-6 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg shadow-lg text-white">
-          <h3 className="text-2xl font-bold mb-2">Important Dates</h3>
-          <p className="text-lg">
-            <span className="font-semibold">Appraisal Cycle: </span> 
-            {appraisalStartDate} to {appraisalEndDate}
-          </p>
-          <p className="text-lg">
-            <span className="font-semibold">Goal Setting: </span> 
-            {goalSettingStartDate} to {goalSettingEndDate}
-          </p>
-          <p className="mt-2">
-            Ensure your goals for the upcoming year are set during the designated period to align with organizational objectives.
-          </p>
-       </div> */}
+
       <div className="mt-8 ml-4 w-3/5 p-4 bg-white border shadow-md rounded-md ">
             <h2 className="text-2xl font-bold text-white bg-blue-500 p-2 rounded mb-4">Important Dates</h2>
             {currentDate >= appraisalVisibleStart && currentDate <= appraisalDueDate ? (
