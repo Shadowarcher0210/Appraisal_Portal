@@ -1,6 +1,5 @@
 import React from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import Homelandingpage from './components/hrManager/Homelanding.js';
 import Viewallappraisals from './components/Viewallappraisals.js';
 import ConfigureAppraisalForms from './components/hrManager/ConfigureAppraisalForms.js'; 
 import Header from './components/Header.js';
@@ -35,7 +34,6 @@ const App = () => {
           <Route path='/profile' element={<Profile />} /> 
           <Route path='/forgotpassword' element={<ForgotPassword />} /> 
           <Route path='/resetPassword/:id/:token' element={<ResetPassword />} /> 
-          <Route path="/home" element={<Homelandingpage />} />
           <Route path="/viewallappraisals" element={<Viewallappraisals />} />
           <Route path="/form" element={<EmpForm />} />
 

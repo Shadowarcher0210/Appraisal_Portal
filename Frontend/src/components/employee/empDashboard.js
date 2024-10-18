@@ -3,39 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Modal from '../hrManager/Modal';
 import axios from 'axios';
 
-const ActionMenu = ({ isOpen, onClick, index }) => {
-  const navigate = useNavigate();
-  
-  return (
-    <div className="relative">
-      <button
-        className="text-xl ml-8 font-bold focus:outline-none"
-        onClick={onClick}
-      >
-        •••
-      </button>
 
-      {isOpen && (
-        <div className="absolute right-0 mt-2 w-[150px] bg-white border border-gray-300 shadow-md z-10">
-          <ul className="list-none p-0 m-0">
-            <li
-              className="p-2 text-base cursor-pointer hover:bg-gray-200"
-              onClick={() => navigate('/form')}
-            >
-              Edit
-            </li>
-            <li
-              className="p-2 text-base cursor-pointer hover:bg-gray-200"
-              onClick={() => alert(`Download clicked for item ${index}`)}
-            >
-              Download
-            </li>
-          </ul>
-        </div>
-      )}
-    </div>
-  );
-};
 
 const Dashboard = () => {
   const [isModalOpen, setModalOpen] = useState(false);
