@@ -107,7 +107,67 @@ const saveAppraisalDetails = async (req, res) => {
         }
 };
 
-
+const updateAppraisalStatus = async (req, res) => {
+    const { userId, startDate, endDate } = req.params; // Extract from route params
+    const { status } = req.body; // Status from the request body
+  
+    try {
+      if (!userId) {
+        return res.status(400).send({ error: "User ID is required" });
+      }
+  
+      if (!startDate || !endDate) {
+        return res.status(400).send({ error: "A valid start and end date are required." });
+      }
+  
+      const timePeriod = [new Date(startDate), new Date(endDate)];
+  
+      const validStatuses = ["To Do", "In Progress", "Submitted", "Under Review", "Completed"];
+      if (!validStatuses.includes(status)) {
+        return res.status(400).send({ error: "Invalid status value provided" });
+      }
+  
+      const appraisal = await Appraisal.findOneAndUpdate(
+        {
+          userId: userId,
+          timePeriod: { $all: timePeriod },
+        },
+        { status: status }, 
+        {
+          new: true, 
+          fields: {
+            _id: 0,
+            timePeriod: 1,
+            initiatedOn: 1,
+            managerName: 1,
+            depName: 1,
+            empScore: 1,
+            status: 1,
+          },
+        }
+      );
+  
+      if (!appraisal) {
+        return res.status(404).json({
+          message: "Appraisal not found for this employee and time period.",
+        });
+      }
+  
+      res.status(200).json({
+        message: "Appraisal status updated successfully!",
+        status: appraisal.status,
+        timePeriod: appraisal.timePeriod,
+        initiatedOn: appraisal.initiatedOn,
+        managerName: appraisal.managerName,
+        depName: appraisal.depName,
+        empScore: appraisal.empScore,
+        pageData: appraisal.pageData,
+      });
+    } catch (error) {
+      console.error("Error updating appraisal status:", error);
+      res.status(500).send({ error: "Error updating appraisal status" });
+    }
+  };
 const getAppraisals = async (req, res) => {
     const { userId } = req.params; 
     try {
@@ -151,4 +211,4 @@ const getAppraisals = async (req, res) => {
     }
 };
 
-module.exports = {displayAppraisal, saveAppraisalDetails, getAppraisals}
+module.exports = {displayAppraisal, saveAppraisalDetails,updateAppraisalStatus, getAppraisals}

@@ -20,7 +20,7 @@ const ActionMenu = ({ isOpen, onClick, index }) => {
           <ul className="list-none p-0 m-0">
             <li
               className="p-2 text-base cursor-pointer hover:bg-gray-200"
-              onClick={() => navigate('/view')}
+              onClick={() => navigate('/form')}
             >
               Edit
             </li>
@@ -47,7 +47,7 @@ const Dashboard = () => {
   
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
-  
+  const navigate = useNavigate()
   const appraisalStartDate = new Date(`${currentYear - 1}-03-01`).toLocaleDateString();
   const appraisalEndDate = new Date(`${currentYear}-03-31`).toLocaleDateString();
   const appraisalDueDate = new Date(`${currentYear}-03-15`);
@@ -118,6 +118,25 @@ const Dashboard = () => {
     setOpenMenuIndex(openMenuIndex === index ? null : index);
   };
 
+  const handleEditClick = async (appraisal)=>{
+    const userId = localStorage.getItem('userId');
+    const {timePeriod} = appraisal;
+    try{
+const response = await axios.put(`http://localhost:3003/form/status/${userId}/${timePeriod[0]}/${timePeriod[1]}`,{status : 'In Progress'})
+
+if(response.status === 200){
+  console.log('Status updated Successfully :',response.data);
+  fetchAppraisalDetails();
+}else{
+  console.error('Failed to update status :',response.statusText)
+}
+    }catch(error){
+      console.error('Error updating status:', error);
+    }
+    navigate('/form', { state: { timePeriod } })
+    
+  }
+
   return (
     <div className="justify-center items-start mt-20 ml-28 ">
       <div>
@@ -159,13 +178,10 @@ const Dashboard = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{appraisal.initiatedOn}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{appraisal.managerName}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500 ">{appraisal.status}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-500 hover:text-blue-700 cursor-pointer">
-                      <ActionMenu
-                          isOpen={openMenuIndex === index}
-                          onClick={() => handleMenuClick(index)}
-                          index={index}
-                      />
-                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-500 text-center">
+                     
+                     <button className='bg-blue-500 text-white hover:bg-blue-600 rounded-md px-2 py-1' onClick={()=>handleEditClick(appraisal)}>Edit</button>
+                 </td>
             </tr>
            ))
         ) : (
