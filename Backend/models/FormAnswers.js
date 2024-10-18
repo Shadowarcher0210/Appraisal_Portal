@@ -17,7 +17,17 @@ const formAnswerSchema = new mongoose.Schema(
                 required: true,
             },
             _id: false
-        }]
+        }],
+        timePeriod: {
+            type: [String], 
+            validate: {
+                validator: function(v) {
+                    return v.length === 2; // For displaying two dates
+                },
+                message: 'Time period must contain exactly two dates (start and end).'
+            },
+        },
+
     }
 )
 

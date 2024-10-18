@@ -1,12 +1,11 @@
 const express = require('express');
-const { saveAppraisal,saveAppraisalDetails, getAppraisals } = require('../controllers/appraisalController');
+const { displayAppraisal,saveAppraisalDetails, getAppraisals } = require('../controllers/appraisalController');
 const {authenticateUser} = require('../middleware/authenticateUser')
 
 const router = express.Router()
 
-router.post('/save',authenticateUser,saveAppraisal)
-router.post('/saveDetails/:userId',authenticateUser,saveAppraisalDetails)
-
+router.post('/save',authenticateUser, displayAppraisal)
+router.post('/saveDetails/:userId/:startDate/:endDate',authenticateUser,saveAppraisalDetails)
 router.get('/display/:userId', getAppraisals);
 
 
