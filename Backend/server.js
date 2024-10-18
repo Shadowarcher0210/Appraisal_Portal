@@ -11,7 +11,7 @@ const formRoutes = require('./routes/appraisalRoutes');
 const empRoutes = require('./routes/dashboardRouter')
 const timePeriod  = require('./routes/timePeriod');
 const uploadAppraisalLetter  = require('./routes/uploadRouter');
-const { sendConfirmationEmails } = require('./controllers/emailController');
+const sendConfirmationEmails = require('./routes/emailRouter');
 
 app.use(cors());
 app.use(express.json());
