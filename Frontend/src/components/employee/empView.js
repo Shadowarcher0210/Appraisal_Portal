@@ -89,10 +89,7 @@ const EmpView = () => {
     navigate('/employee-dashboard');
   };
 
-  const handleBack = () => {
-    navigate('/employee-dashboard');
-  };
-
+  
   const instructionsList = [
     'You fill your appraisal and submit to your manager.',
     'Your manager fills their comments and ratings for your appraisal and submits to HR.',

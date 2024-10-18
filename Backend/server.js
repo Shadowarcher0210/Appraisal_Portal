@@ -5,6 +5,7 @@ const dotenv = require('dotenv').config();
 const app = express(); 
 const PORT = process.env.PORT || 3003;
 const connectDb = require("./config/dbConnection");
+const bodyParser = require('body-parser');
 
 const formRoutes = require('./routes/appraisalRoutes'); 
 const empRoutes = require('./routes/dashboardRouter')

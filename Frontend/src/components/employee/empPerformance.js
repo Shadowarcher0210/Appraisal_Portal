@@ -40,7 +40,8 @@ const ActionMenu = ({ isOpen, onClick, index }) => {
 };
 
 const E_PerformancePage = () => {
-  const [filteredApps, setFilteredApps] = useState([]);
+  
+  const [appraisalForms , setAppraisalForms] = useState([]);
   const [selectedYear, setSelectedYear] = useState(null);
   const [academicYears, setAcademicYears] = useState([]);
   const [openMenuIndex, setOpenMenuIndex] = useState(null);
@@ -133,7 +134,7 @@ const E_PerformancePage = () => {
   };
   
   return (
-    <div className='ml-28 mt-20'>
+    <div className='justify-center items-start mt-20 ml-28'>
       <div>
         <div>
         <label className='ml-6 pl-4 rounded-lg py-1 p-1 bg-slate-100'>
