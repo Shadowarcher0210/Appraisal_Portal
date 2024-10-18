@@ -146,7 +146,7 @@ if(response.status === 200){
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{appraisal.initiatedOn}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{appraisal.managerName}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500 ">{appraisal.status}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-500 text-center">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-500 ">
                      
                      <button className='bg-blue-500 text-white hover:bg-blue-600 rounded-md px-2 py-1' onClick={()=>handleEditClick(appraisal)}>Edit</button>
                  </td>

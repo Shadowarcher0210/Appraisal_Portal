@@ -1,5 +1,5 @@
 import React, { useState, useEffect  } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios'
 
 const TABS = [
@@ -19,6 +19,8 @@ const EmpForm = () => {
   const [isGoalSectionOpen, setIsGoalSectionOpen] = useState(false);
   const [goalText, setGoalText] = useState('');
   const [isThankYouModalOpen, setIsThankYouModalOpen] = useState(false);
+  const location = useLocation();
+  const {timePeriod} = location.state || {}
 
 
   const handleAddGoal = () => {
@@ -64,6 +66,9 @@ const EmpForm = () => {
   const handleSaveandexit = () => {
     navigate('/employee-dashboard');
   };
+  
+
+ 
 
   const userDetails = async () => {
     const userId = localStorage.getItem('userId');
@@ -88,22 +93,22 @@ useEffect(() => {
   userDetails();
 }, []); 
 const handleSubmit = () => {
-  setIsModalOpen(true);
+ setIsModalOpen(true)
    // Show the modal asking for confirmation
 };
 
-  const handleConfirmSubmit = async (e) => {
-    e.preventDefault(); 
+  const handleConfirmSubmit = async () => {
     setIsModalOpen(false);
     setIsThankYouModalOpen(true);
     
     
     // Simulate an async operation or API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+   
     
     
        try {
-        const response = await fetch(`http://localhost:3003/confirmationEmail/email`, {
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        const emailresponse = await fetch(`http://localhost:3003/confirmationEmail/email`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -112,14 +117,29 @@ const handleSubmit = () => {
                 email
             }),
         });
-        const data = await response.json();
-        console.log(data.message);
-        setIsModalOpen(true); // Handle response
-       
-    } catch (error) {
-        console.error('Error:', error);
-    }
+        const emailData = await emailresponse.json();
+        console.log(emailData.message);
+    
+        const userId = localStorage.getItem('userId');
+  
+
+        const response = await axios.put(`http://localhost:3003/form/status/${userId}/${timePeriod[0]}/${timePeriod[1]}`,{status : 'Submitted'})
+
+        if(response.status === 200){
+          console.log('Status updated Successfully :',response.data);
+          
+        }else{
+          console.error('Failed to update status :',response.statusText)
+        }
+            }catch(error){
+              console.error('Error updating status:', error);
+            }
+            finally {
+              // Optionally reopen the modal or perform any cleanup
+              setIsModalOpen(true);
+            }
    
+    
  
 };
 
@@ -473,7 +493,7 @@ const handleSubmit = () => {
               <div className="mt-4 flex justify-between">
                 <button
                   className="bg-blue-500 text-white px-4 py-1 rounded"
-                  onClick={handleConfirmSubmit}
+                  onClick={()=>handleConfirmSubmit()}
                 >
                   Yes
                 </button>
