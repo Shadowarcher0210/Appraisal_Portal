@@ -1,6 +1,6 @@
-import React, { useEffect,useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from 'axios'
 
 const TABS = [
   "Introduction",
@@ -16,10 +16,10 @@ const EmpView = () => {
   const [selfAppraisalPage, setSelfAppraisalPage] = useState(0);
   const [completedSteps, setCompletedSteps] = useState(0);
   const navigate = useNavigate();
-  const [userData, setUserData] = useState(null);
-
+  const [email, setEmail] = useState('');
   const [isGoalSectionOpen, setIsGoalSectionOpen] = useState(false);
   const [goalText, setGoalText] = useState('');
+  const [isThankYouModalOpen, setIsThankYouModalOpen] = useState(false);
 
 
   const handleAddGoal = () => {
@@ -51,45 +51,95 @@ const EmpView = () => {
       setActiveTab(activeTab + 1);
       setSelfAppraisalPage(0);
       setCompletedSteps(Math.max(completedSteps, activeTab + 1));
-      storeAppraisalForm()
-    }
-  };
-
-  const handleContinue1 = () => {
-    if (activeTab === 1 && selfAppraisalPage === 0) {
-      setSelfAppraisalPage(1);
-    } else if (activeTab < TABS.length - 1) {
-      setActiveTab(activeTab + 1);
-      setSelfAppraisalPage(0);
-      setCompletedSteps(Math.max(completedSteps, activeTab + 1));
     }
   };
 
   const handlePreviousForm = () => {
-    if (activeTab === 2) {
-      setActiveTab(1);  
-      setSelfAppraisalPage(1);  
-    } else if (activeTab === 1 && selfAppraisalPage > 0) {
+    if (selfAppraisalPage > 0) {
       setSelfAppraisalPage(selfAppraisalPage - 1);
     } else if (activeTab > 0) {
       setActiveTab(activeTab - 1);
     }
   };
 
-  // const handleSaveandexit = () => {
-  //   navigate('/employee-dashboard');
-  // };
-
-  const handleSubmit = () => {
-    setIsModalOpen(true);
+  const handleSaveandexit = () => {
+    navigate('/employee-dashboard');
   };
+
+  const userDetails = async () => {
+    const userId = localStorage.getItem('userId');
+    console.log("Retrieved userId:", userId);
+
+    if (userId) {
+      
+        try {
+            const response = await axios.get(`http://localhost:3003/all/details/${userId}`);
+            setEmail(response.data.user.email);
+            console.log("email", response.data.user.email); 
+          } catch (error) {
+            console.error('Error fetching user details:', error);
+        }
+    } else {
+        console.log('User ID not found in local storage.');
+    }
+};
+useEffect(() => {
+  console.log("useEffect called to fetch user details");
+
+  userDetails();
+}, []); 
+const handleSubmit = () => {
+  setIsModalOpen(true);
+   // Show the modal asking for confirmation
+};
+
+  const handleConfirmSubmit = async (e) => {
+    e.preventDefault(); 
+    setIsModalOpen(false);
+    setIsThankYouModalOpen(true);
+    
+    
+    // Simulate an async operation or API call
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    
+    
+       try {
+        const response = await fetch(`http://localhost:3003/confirmationEmail/email`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email
+            }),
+        });
+        const data = await response.json();
+        console.log(data.message);
+        setIsModalOpen(true); // Handle response
+       
+    } catch (error) {
+        console.error('Error:', error);
+    }
+   
+ 
+};
+
 
   const closeModal = () => {
     setIsModalOpen(false);
     navigate('/employee-dashboard');
   };
-
+  const closeThankYouModal = () => {
+    setIsThankYouModalOpen(false);
+    navigate('/employee-dashboard');
   
+  };
+
+
+  const handleBack = () => {
+    navigate('/employee-dashboard');
+  };
+
   const instructionsList = [
     'You fill your appraisal and submit to your manager.',
     'Your manager fills their comments and ratings for your appraisal and submits to HR.',
@@ -103,25 +153,6 @@ const EmpView = () => {
     'It is mandatory to provide ratings and comments against all Competencies in the Competency Form and Goals in the Goal Sheet form. These ratings help you in defining your achievements as also help your manager in entering in ratings and comments while filling up your appraisal.',
     'As a good practice, go through all the forms and understand what data is required to be filled in. While you can complete the appraisal in multiple sittings, it may be a good idea to collect all the details prior to your starting to fill in the forms.',
   ];
-
-  const storeAppraisalForm = async () => {
-    const userId = localStorage.getItem('userId');
-    if (userId) {
-      try {
-        const response = await axios.post('http://localhost:3003/form/save');
-        setUserData(response.data);
-        console.log("userdata",userData)
-      } catch (error) {
-        console.error('Error fetching user details:', error);
-      }
-    } else {
-      console.log('User ID not found in local storage.');
-    }
-  };
-
-  // useEffect(() => {
-  //   storeAppraisalForm();
-  // }, []);
 
   return (
     <div className="flex h-screen ml-24 mt-16">
@@ -204,7 +235,7 @@ const EmpView = () => {
                 </button>
                 <button
                   className="bg-orange-400 hover:bg-orange-500 transition duration-300 text-white font-semibold py-2 px-6 rounded-lg"
-                  onClick={handleContinue1}
+                  onClick={handleContinue}
                 >
                   Continue
                 </button>
@@ -213,12 +244,64 @@ const EmpView = () => {
             </div>
           )}
 
-          
-          {activeTab === 1 && (
+          {/* {activeTab === 1 && (
+            <div className="relative h-full flex flex-col">
+              <h1>Goals</h1>
+              <p>Content for the Goals tab.</p>
+
+              {!isGoalSectionOpen && (
+                <button
+                  className="bg-blue-500 text-white px-4 py-2 rounded mt-4 w-48 ml-8"
+                  onClick={handleAddGoal}
+                >
+                  Add Your First Goal
+                </button>
+              )}
+
+
+              {isGoalSectionOpen && (
+                <div className="border rounded-lg p-4 mt-4 shadow-lg bg-gray-100">
+                  <h >Comments</h>
+                  <textarea
+                    className="w-full h-24 border border-gray-300 rounded p-2 resize-none mt-4"
+                    placeholder="Enter your goal..."
+                    value={goalText}
+                    onChange={(e) => setGoalText(e.target.value)}
+                  ></textarea>
+
+                  <div className="flex justify-end space-x-2 mt-4">
+                    <button
+                      className={`px-4 py-2 rounded ${goalText.trim()
+                          ? 'bg-green-500 text-white'
+                          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        }`}
+                      onClick={handleSaveGoal}
+                    >
+                      Save
+                    </button>
+                    <button
+                      className="bg-red-500 text-white px-4 py-2 rounded"
+                      onClick={handleExitGoal}
+                    >
+                      Exit
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <div className="sticky bottom-0 bg-white py-4 flex justify-end space-x-2">
+                <button className="bg-orange-400 rounded-lg p-2 text-white px-4 mr-auto" onClick={handlePreviousForm}>Back</button>
+                <button className="bg-orange-400 rounded-lg  text-white px-4 " onClick={handleContinue}>Continue</button>
+              </div>
+            </div>
+          )
+          } */}
+
+          {activeTab ===1  && (
             <>
               {selfAppraisalPage === 0 && (
                 <div className="relative h-full flex flex-col">
-                  <h1 className="font-normal">Please select your response for self appraisal</h1>
+                  <h1 className="font-normal">Please tick your response for self appraisal</h1>
                   <table className="border border-gray-800 w-full mt-4 rounded-lg">
                     <thead className="border border-blue-500  bg-blue-500 rounded-lg ">
                       <tr className=' text-white font-medium  text-center text-md'>
@@ -325,7 +408,7 @@ const EmpView = () => {
 
                   <div className="mt-4 flex-1 overflow-y-auto">
 
-                  <div className="border rounded-lg shadow-lg p-4 mb-4 bg-white">
+                    <div className="border rounded-lg shadow-lg p-4 mb-4 bg-white">
                       <h2 className="font-semibold mb-2">Adaptability </h2>
                       <p>I am flexible and receptive regarding new ideas and approaches</p>
                       <textarea
@@ -344,8 +427,8 @@ const EmpView = () => {
                     </div>
 
                     <div className="border rounded-lg shadow-lg p-4 mb-4 bg-white">
-                    <h2 className="font-semibold mb-2">Communication</h2>
-                    <p>I express my ideas clearly and listen actively to others, fostering an open dialogue.</p>
+                      <h2 className="font-semibold mb-2">Collaboration</h2>
+                      <p>I Cultivate Positive Relationships .I am willing to learn from others</p>
                       <textarea
                         className="w-full h-24 border border-gray-300 rounded p-2 mt-2 resize-none "
                         placeholder="Type your answer here..."
@@ -353,8 +436,8 @@ const EmpView = () => {
                     </div>
 
                     <div className="border rounded-lg shadow-lg p-4 mb-4 bg-white">
-                    <h2 className="font-semibold mb-2">Problem-Solving</h2>
-                    <p>I approach challenges with a solution-oriented mindset, utilizing critical thinking to find effective resolutions.</p>
+                      <h2 className="font-semibold mb-2">Collaboration</h2>
+                      <p>I Cultivate Positive Relationships .I am willing to learn from others</p>
                       <textarea
                         className="w-full h-24 border border-gray-300 rounded p-2 mt-2 resize-none "
                         placeholder="Type your answer here..."
@@ -362,8 +445,8 @@ const EmpView = () => {
                     </div>
 
                     <div className="border rounded-lg shadow-lg p-4 mb-4 bg-white">
-                    <h2 className="font-semibold mb-2">Teamwork</h2>
-                    <p>I thrive in collaborative environments, contributing my strengths while valuing the diverse perspectives of my team.</p>
+                      <h2 className="font-semibold mb-2">Collaboration</h2>
+                      <p>I Cultivate Positive Relationships .I am willing to learn from others</p>
                       <textarea
                         className="w-full h-24 border border-gray-300 rounded p-2 mt-2 resize-none "
                         placeholder="Type your answer here..."
@@ -425,31 +508,69 @@ const EmpView = () => {
                 >
                   Back
                 </button>
+           
                 <button
                   className="bg-orange-400 rounded-lg p-2 text-white px-4 transition duration-200 hover:bg-orange-500 mr-auto"
-                  onClick={handleSubmit}
+                 onClick={handleSubmit}
+      
                 >
                   Submit
                 </button>
+             
               </div>
+              
             </div>
           )}
-
+   
         </div>
-
+        {/* {loading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
+          <RingLoader color="#4C5E6A" />
+        </div>
+      )} */}
         {isModalOpen && (
           <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
             <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h2 className="text-xl font-bold mb-4 text-center">Appraisal Submitted</h2>
-              <p>Your appraisal has been submitted successfully!</p>
-              <div className="mt-4">
-                <button className="flex bg-blue-500 text-white py-2 rounded w-40 ml-16 text-center justify-center items-center" onClick={closeModal}>
-                  OK
+              <h2 className="text-xl font-bold mb-4">Do you want to submit your appraisal?</h2>
+              <div className="mt-4 flex justify-between">
+                <button
+                  className="bg-blue-500 text-white px-4 py-1 rounded"
+                  onClick={handleConfirmSubmit}
+                >
+                  Yes
+                </button>
+               
+                <button
+                  className="bg-red-500 text-white px-4 py-1 rounded"
+                  onClick={closeModal}  
+                >
+                  No
                 </button>
               </div>
+         
+            </div>
+      
+          </div>
+          
+        )}
+
+
+{isThankYouModalOpen && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-xl font-bold mb-4">Thank you for your submission!</h2>
+            <div className="mt-4 flex justify-center">
+              <button
+                className="bg-blue-500 text-white px-2 py-1 rounded"
+                onClick={closeThankYouModal}
+              >
+                Close
+              </button>
             </div>
           </div>
-        )}
+        </div>
+      )}
+          
       </div>
     </div>
   );

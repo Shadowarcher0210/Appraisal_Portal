@@ -2,15 +2,11 @@ const nodemailer = require('nodemailer');
 const UserModel = require('../models/Email');
 const Appraisal = require('../models/Appraisal');
 
-
   const sendConfirmationEmails = async (req, res) => {
   try {
-    const { email } = req.body;
-    const { userId} = req.body;
-
-   
+    const { email } = req.body;   
     const user = await UserModel.findOne({ email });
-    const appraisal = await Appraisal.findOne({userId})
+    const appraisal = await Appraisal.findOne()
     if (!user) {
       return res.status(404).send({
         success: false,
@@ -52,4 +48,4 @@ catch (error) {
  
 };
 
-module.exports ={sendConfirmationEmails}; 
+module.exports ={sendConfirmationEmails};
