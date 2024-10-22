@@ -212,5 +212,40 @@ const getAppraisals = async (req, res) => {
         res.status(500).send('Error fetching appraisal data');
     }
 };
+const getAppraisalAnswers = async (req, res) => {
+    const { userId, startDate, endDate } = req.params; 
+    try {
 
-module.exports = {displayAppraisal, saveAppraisalDetails,updateAppraisalStatus, getAppraisals}
+        const timePeriod = [
+            new Date(startDate).toISOString().split('T')[0], 
+            new Date(endDate).toISOString().split('T')[0]
+        ];
+
+        const appraisalAnswers = await FormAnswers.find(
+            { 
+                userId: userId, 
+                timePeriod: {
+                    $gte: timePeriod[0], 
+                    $lte: timePeriod[1]   
+                }
+             },
+             { pageData:1, timePeriod:1, _id: 0 });
+     
+     
+             console.log('Retrieved Appraisals Answers:', appraisalAnswers);
+
+
+        if (appraisalAnswers.length === 0) {
+            return res.status(404).json({ message: 'No appraisals found for this employee.' });
+        }
+        const responseData = appraisalAnswers.map(appraisal => ({
+            pageData: appraisal.pageData
+        }));
+        res.status(200).json(responseData);
+    } catch (error) {
+        console.error('Error fetching appraisals:', error);
+        res.status(500).send('Error fetching appraisal data');
+    }
+};
+
+module.exports = {displayAppraisal, saveAppraisalDetails,updateAppraisalStatus, getAppraisals, getAppraisalAnswers}
