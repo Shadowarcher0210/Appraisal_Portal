@@ -36,7 +36,7 @@ const App = () => {
           <Route path='/resetPassword/:id/:token' element={<ResetPassword />} /> 
           <Route path="/viewallappraisals" element={<Viewallappraisals />} />
           <Route path="/form" element={<EmpForm />} />
-
+         
           <Route path="/performance" element={<PerformancePage />} />
           <Route path="/configure-appraisal-forms" element={<ConfigureAppraisalForms />} />
           <Route path="/view" element={<EmpView />} />
