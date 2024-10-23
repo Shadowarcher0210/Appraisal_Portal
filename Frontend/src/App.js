@@ -12,7 +12,7 @@ import ResetPassword from './components/ResetPassword.js';
 import Dashboard from './components/employee/empDashboard.js';
 import EmpView from './components/employee/empView.js';
 import EmpForm from './components/employee/empForm.js';
-import Goals from './components/employee/Goals.js';
+// import Goals from './components/employee/Goals.js';
 const App = () => {
   const location = useLocation();
 
@@ -42,7 +42,7 @@ const App = () => {
           <Route path="/view" element={<EmpView />} />
           <Route path="/employee-dashboard" element={<Dashboard />} />
           <Route path="/employee-performance" element={<empPerformance />} />
-          <Route path="/Goals" element={< Goals />} />
+          {/* <Route path="/Goals" element={< Goals />} /> */}
      
         </Routes>
       </div>

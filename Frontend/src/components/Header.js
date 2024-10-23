@@ -1,3 +1,4 @@
+//Header 
 import React, { useState, useRef, useEffect } from 'react';
 import logo from '../assets/logo.png';
 import { useNavigate } from 'react-router-dom';
@@ -212,4 +213,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default Header

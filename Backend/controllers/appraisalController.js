@@ -83,9 +83,10 @@ const saveAppraisalDetails = async (req, res) => {
 
             const saveForm = new FormAnswers({
                 userId,
-                pageData: pageData.map(({ questionId, answer }) => ({
+                pageData: pageData.map(({ questionId, answer , notes }) => ({
                     questionId,
                     answer,
+                    notes
                 })),
                 timePeriod 
             });
@@ -96,6 +97,7 @@ const saveAppraisalDetails = async (req, res) => {
                 message: 'Appraisal form saved successfully!',
                 userId: savedForm.userId,
                 pageData: savedForm.pageData,
+                notes:savedForm.notes,
                 timePeriod: savedForm.timePeriod
             });
         } catch (error) {
