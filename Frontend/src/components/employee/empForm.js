@@ -4,8 +4,8 @@ import axios from 'axios'
 
 const TABS = [
   "Introduction",
-  // "Goals",
   "Self Appraisal",
+  "Goals"
 ];
 
 const EmpForm = () => {
@@ -67,7 +67,6 @@ const EmpForm = () => {
     navigate('/employee-dashboard');
   };
   
-
  
 
   const userDetails = async () => {
@@ -173,7 +172,7 @@ const handleSubmit = () => {
   ];
 
   return (
-    <div className="flex h-screen ml-24 mt-16">
+    <div className="flex h-screen  mt-16">
       <div className="w-48 h-full bg-gray-100 p-4 fixed">
         <h2 className="text-lg font-bold mb-6">Forms</h2>
         <ul>
@@ -475,13 +474,66 @@ const handleSubmit = () => {
                   <div className="sticky bottom-0 bg-white py-4 flex justify-end space-x-2">
                     <button className="bg-orange-400 rounded-lg p-2 text-white px-4 mr-auto" onClick={handlePreviousForm}>Back</button>
                     {/* <button className="bg-orange-400 rounded-lg p-2 text-white px-4 py-2" onClick={handleSaveandexit}>Save & Exit</button> */}
-                    <button className="bg-orange-400 rounded-lg p-2 text-white px-4 " onClick={handleSubmit}>Submit</button>
+                    <button className="bg-orange-400 rounded-lg p-2 text-white px-4 " onClick={handleContinue}>Continue</button>
                   </div>
                 </div>
 
               )}
             </>
           )}
+
+{activeTab === 2 && (
+            <div className="relative h-full flex flex-col">
+              <h1>Goals</h1>
+              <p>Content for the Goals tab.</p>
+
+              {!isGoalSectionOpen && (
+                <button
+                  className="bg-blue-500 text-white px-4 py-2 rounded mt-4 w-48 ml-8"
+                  onClick={handleAddGoal}
+                >
+                  Add Your First Goal
+                </button>
+              )}
+
+
+              {isGoalSectionOpen && (
+                <div className="border rounded-lg p-4 mt-4 shadow-lg bg-gray-100">
+                  <h >Comments</h>
+                  <textarea
+                    className="w-full h-24 border border-gray-300 rounded p-2 resize-none mt-4"
+                    placeholder="Enter your goal..."
+                    value={goalText}
+                    onChange={(e) => setGoalText(e.target.value)}
+                  ></textarea>
+
+                  <div className="flex justify-end space-x-2 mt-4">
+                    <button
+                      className={`px-4 py-2 rounded ${goalText.trim()
+                          ? 'bg-green-500 text-white'
+                          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        }`}
+                      onClick={handleSaveGoal}
+                    >
+                      Save
+                    </button>
+                    <button
+                      className="bg-red-500 text-white px-4 py-2 rounded"
+                      onClick={handleExitGoal}
+                    >
+                      Exit
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <div className="sticky bottom-0 bg-white py-4 flex justify-end space-x-2">
+                <button className="bg-orange-400 rounded-lg p-2 text-white px-4 mr-auto" onClick={handlePreviousForm}>Back</button>
+                <button className="bg-orange-400 rounded-lg  text-white px-4 " onClick={handleSubmit}>Submit</button>
+              </div>
+            </div>
+          )
+          }
 
       
         </div>

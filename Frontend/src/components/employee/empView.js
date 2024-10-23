@@ -1,7 +1,7 @@
 import React from 'react';
 
 const empView = () => {
-  // Static questions and answers
+ 
   const questionsAndAnswers = [
     { question: 'Adaptability', answer: 'I am very adaptable.' },
     { question: 'Collaboration', answer: 'I work well with others.' },
@@ -16,7 +16,7 @@ const empView = () => {
   ];
 
   return (
-    <div className="h-dvh ml-24 mt-16 w-11/12">
+    <div className="h-dvh ml-4 mt-16 w-11/12">
       {/* Header Section */}
       <h1 className="text-center font-bold text-3xl">Appraisal Details</h1>
 
