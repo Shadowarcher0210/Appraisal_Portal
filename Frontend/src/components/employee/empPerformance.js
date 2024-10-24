@@ -42,11 +42,11 @@ const E_PerformancePage = () => {
     setOpenMenuIndex(null);
   };
 
-  const handleYearChange = (e) => {
-    const year = e.target.value;
-    setSelectedYear(year);
-    fetchAppraisalDetails(year);
-  };
+  // const handleYearChange = (e) => {
+  //   const year = e.target.value;
+  //   setSelectedYear(year);
+  //   fetchAppraisalDetails(year);
+  // };
 
 
   const fetchAppraisalDetails = async () => {
@@ -62,9 +62,7 @@ const E_PerformancePage = () => {
     }
 
   }
-  useEffect(() => {
-    fetchAppraisalDetails()
-  }, []);
+
 
   const handleViewClick = (appraisal) => {
     console.log("Navigating to view");

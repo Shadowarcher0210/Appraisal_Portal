@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import logo from '../assets/logo.png'
+import nothing from '../assets/nothing.png'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'
 
@@ -12,6 +13,7 @@ const Header = () => {
   const [appraisalNotification, setAppraisalNotification] = useState(null);
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null);
+  const [isHovered, setIsHovered] = useState(false);
 
   const navigate = useNavigate();
 
@@ -149,11 +151,34 @@ useEffect(()=>{
             className="text-lg flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full hover:bg-gray-300"
             onClick={() => setShowNotificationDropdown((prev) => !prev)}
           >
-            <i className="fas fa-bell"></i>
-          </button>
+            {/* <i className="fas fa-bell"></i> */}
+            {/* <img src={notif} alt="Logo" className="h-8 w-auto" /> */}
+            {/* <div className="h-8 w-10 rounded-full bg-transparent hover:bg-[#E9F2FF] transition duration-300 ease-in-out flex items-center justify-center">
+              <img src={notif} alt="Logo" className="h-8 w-auto" />
+            </div> */}
+            <div
+              className="h-8 w-10 rounded-full bg-transparent hover:bg-[#E9F2FF] transition duration-300 ease-in-out flex items-center justify-center"
+            >
+              <svg
+                width="22"
+                height="20"
+                viewBox="0 0 24 24"
+                className="h-6 w-auto transition-colors duration-300 ease-in-out"
+                xmlns="http://www.w3.org/2000/svg"
+                fill={isHovered ? "#0C66E4" : "#44546F"}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+              >
+                <path d="M6.49 17.67a2 2 0 0 0 2.83 0l-2.83-2.83a2 2 0 0 0 0 2.83m4.89-12.19-.72.73c-.78.78-2.21 1.81-3.21 2.31l-3.02 1.51c-.49.25-.58.77-.19 1.17l8.56 8.56c.4.4.92.31 1.17-.19l1.51-3.02c.49-.99 1.53-2.42 2.31-3.21l.73-.73a5.05 5.05 0 0 0 .64-6.36 1.01 1.01 0 1 0-1.35-1.49q-.04.04-.07.08A5.04 5.04 0 0 0 14.95 4a5.04 5.04 0 0 0-3.57 1.48" />
+              </svg>
+            </div>
+
+
+            </button>
           {showNotificationDropdown && (
-            <div className="w-80 bg-white p-4 absolute top-full right-0 shadow-lg mt-2 rounded-md max-h-[700px] overflow-y-auto">
-              <h2 className="text-xl font-semibold mb-4 text-gray-800">Notifications</h2>
+            <div className="w-80 bg-white p-4 absolute top-full right-0 shadow-xl border-gray-500 mt-3 rounded-md max-h-[700px] overflow-y-auto">
+              <h2 className="text-xl font-semibold mb-2 text-gray-800">Notifications</h2>
+              <hr className='border-b-2 border-gray-200'/><br/>
               
          
               {isLoading && (
@@ -164,34 +189,46 @@ useEffect(()=>{
 
            
               {error && (
+                <div>
                 <div className="bg-red-50 p-4 rounded-md mb-4 border-l-4 border-red-400">
                   <p className="text-sm text-red-800">{error}</p>
                 </div>
+                <div className="flex items-center justify-center h-full">
+                  <img src={nothing} alt="Nothing to show" className="h-32 w-auto" />
+                </div>
+
+                </div>
+                
               )}
 
             
               {!isLoading && !error && appraisalNotification && (
                 <div className="bg-yellow-50 p-4 rounded-md mb-4 border-l-4 border-yellow-400">
                   <p className="text-sm text-gray-800">{appraisalNotification}</p>
+                  
                   <p className="text-xs text-gray-500 mt-1">Appraisal Status</p>
                 </div>
               )}
 
            
               {!isLoading && !error && !appraisalNotification && (
-                <div className="text-center py-4">
-                  <p className="text-gray-600">No notifications available</p>
+                <div className="text-center ">
+                  <p className="text-gray-600 mb-6">No notifications available</p>
+
+                  <div className="flex items-center justify-center h-full">
+                  <img src={nothing} alt="Nothing to show" className="h-32 w-auto" />
                 </div>
+               </div>
               )}
 
         
-              <h3 className="text-lg font-semibold my-4 text-gray-800">Team Members</h3>
+              {/* <h3 className="text-lg font-semibold my-4 text-gray-800">Team Members</h3>
               <div className="flex flex-wrap gap-2">
                 <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold">JD</div>
                 <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white font-semibold">AS</div>
                 <div className="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center text-white font-semibold">TK</div>
                 <div className="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center text-white font-semibold">MR</div>
-              </div>
+              </div> */}
             </div>
           )}
         </div>

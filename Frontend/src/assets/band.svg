@@ -1,0 +1,39 @@
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="200"
+    height="300"
+    viewBox="0 0 200 300"
+>
+    <!-- Ladder -->
+    <g fill="#333">
+        <rect x="60" y="10" width="10" height="250" />
+        <rect x="130" y="10" width="10" height="250" />
+        <rect x="60" y="50" width="80" height="10" />
+        <rect x="60" y="100" width="80" height="10" />
+        <rect x="60" y="150" width="80" height="10" />
+        <rect x="60" y="200" width="80" height="10" />
+        <rect x="60" y="250" width="80" height="10" />
+    </g>
+
+    <!-- User Icon -->
+    <g fill="#666">
+        <circle cx="100" cy="275" r="15" /> <!-- Head -->
+        <rect x="90" y="290" width="20" height="30" /> <!-- Body -->
+        <rect x="80" y="290" width="10" height="30" /> <!-- Left Arm -->
+        <rect x="110" y="290" width="10" height="30" /> <!-- Right Arm -->
+        <rect x="90" y="320" width="7" height="15" /> <!-- Left Leg -->
+        <rect x="103" y="320" width="7" height="15" /> <!-- Right Leg -->
+    </g>
+
+    <!-- Title -->
+    <text
+        x="100"
+        y="290"
+        fill="#333"
+        font-size="16"
+        font-family="Arial, sans-serif"
+        text-anchor="middle"
+    >
+        Career Growth
+    </text>
+</svg>

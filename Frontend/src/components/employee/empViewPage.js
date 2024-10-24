@@ -1,7 +1,6 @@
 import {React, useState} from 'react';
 import HelpPopup from '../PopupTemplate';
-import band from "../../assets/band.png";
-
+import band2 from "../../assets/org.png";
 const EmpViewPage = () => {
   const [showHelpPopup, setShowHelpPopup] = useState(false);
 
@@ -51,7 +50,9 @@ const EmpViewPage = () => {
       </th>
       <th className="w-1/6">
         <span className="flex gap-2 text-gray-500 text-md font-normal">
-          <img src={band} className='text-xs' style={{ width: '20px', height: '20px', filter: 'grayscale(100%)' }} alt='Band Icon' />
+          {/* <img src={band} className='text-xs' style={{ width: '20px', height: '20px', filter: 'grayscale(100%)' }} alt='Band Icon' /> */}
+          <img src={band2} className='text-xs' style={{ width: '20px', height: '20px' }} alt='Band Icon' />
+
           Band
         </span>
       </th>
@@ -147,7 +148,7 @@ const EmpViewPage = () => {
 
       {/* Questions and Answers Section */}
 
-      <div className="ml-4 mr-4 mt-4 mb-4 border shadow-lg p-6 rounded-lg bg-white">
+      {/* <div className="ml-4 mr-4 mt-4 mb-4 border shadow-lg p-6 rounded-lg bg-white">
         <h2 className="text-2xl font-semibold text-gray-700 mb-4">Self-Appraisal Responses</h2>
         {questionsAndAnswers.map((item, index) => (
           <div key={index} className="border-b pb-4 mb-4">
@@ -155,7 +156,7 @@ const EmpViewPage = () => {
             <p className="text-gray-700">{item.answer}</p>
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };

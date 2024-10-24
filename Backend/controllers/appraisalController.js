@@ -293,6 +293,7 @@ const getEmployeeAppraisal = async (req,res)=>{
     res.status(500).json({message:'Internal server error'})
         }
     }
+    
 const sendExpiringAppraisalNotification = async (req, res) => {
     const { userId, startDate } = req.params;
     
@@ -307,15 +308,12 @@ const sendExpiringAppraisalNotification = async (req, res) => {
             });
         }
         
-        // Calculate end date (start date + 1 year)
         const endDateTime = new Date(startDateTime);
         endDateTime.setFullYear(endDateTime.getFullYear() + 1);
         
-        // Set time to start of day for comparison
         startDateTime.setHours(0, 0, 0, 0);
         endDateTime.setHours(0, 0, 0, 0);
         
-        // Query for appraisal with calculated date range
         const query = {
             userId: userId,
             $and: [
@@ -330,7 +328,6 @@ const sendExpiringAppraisalNotification = async (req, res) => {
             ]
         };
         
-        // Log the query for debugging
         console.log('Checking appraisal for userId:', userId, 'with start date:', startDate);
         console.log('Query:', JSON.stringify(query));
         
@@ -342,7 +339,6 @@ const sendExpiringAppraisalNotification = async (req, res) => {
             managerName: 1
         });
         
-        // Log the found appraisal for debugging
         console.log('Found appraisal:', JSON.stringify(appraisal));
         
         if (!appraisal) {

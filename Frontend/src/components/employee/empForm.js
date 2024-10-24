@@ -108,7 +108,7 @@ const EmpForm = () => {
     const userId = localStorage.getItem('userId');
     const token = localStorage.getItem('token')
     if (!token) {
-      alert("No token found. Please log in.");
+      console.log("No token found. Please log in.");
       return;
     }
     const pageData = [
@@ -152,10 +152,9 @@ const EmpForm = () => {
         console.log('response', response);
         
         const data = await response.json();
-        alert(data.message);
       } else {
         const errorData = await response.json();
-        alert(`Error: ${errorData.error}`);
+        console.log(`Error: ${errorData.error}`);
       }
       const emailresponse = await fetch(`http://localhost:3003/confirmationEmail/email`, {
         method: 'POST',
