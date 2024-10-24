@@ -106,7 +106,7 @@ if(response.status === 200){
   }
 
   return (
-    <div className="justify-center items-start mt-20 ml-28 ">
+    <div className="justify-center items-start mt-20 ml-6 ">
       <div>
       <label className='font-bold text-4xl w-full ml-2 mb-4'>{wishing()}</label>
             <label className='ml-2 text-3xl font-bold text-orange-600'>
@@ -148,7 +148,7 @@ if(response.status === 200){
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500 ">{appraisal.status}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-500 ">
                      
-                     <button className='bg-blue-500 text-white hover:bg-blue-600 rounded-md px-2 py-1' onClick={()=>handleEditClick(appraisal)}>Edit</button>
+                     <button className='bg-blue-500 text-white hover:bg-blue-600 rounded-md px-2 py-2 w-16 ' onClick={()=>handleEditClick(appraisal)}>Edit</button>
                  </td>
             </tr>
            ))

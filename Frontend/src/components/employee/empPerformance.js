@@ -1,55 +1,17 @@
-
-import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // Make sure to import axios
-
-const applications = [
-  { id: 1, timePeriod: '01/04/2024 to 31/03/2025', manager: 'Chandra Mouli', status: 'initiated' },
-  { id: 2, timePeriod: '01/04/2024 to 31/03/2025', manager: 'Tejaswi', createdDate: '2023-01-30' },
-  { id: 3, timePeriod: '01/04/2024 to 31/03/2025', manager: 'sudhakar', createdDate: '2023-04-10' },
-  { id: 4, timePeriod: '01/04/2024 to 31/03/2025', manager: 'Tyson', createdDate: '2024-02-20' },
-  { id: 5, timePeriod: '01/04/2024 to 31/03/2025', manager: 'Kiran', createdDate: '2024-04-05' },
-];
-
-// const getAcademicYearRange = (year) => {
-//   const start = new Date(year, 3, 1);
-//   const end = new Date(year + 1, 2, 31, 23, 59, 59, 999);
-//   return { start, end };
-// };
-
-const ActionMenu = ({ isOpen, onClick, index }) => {
-  return (
-    <div className="relative">
-      <button className="text-xl font-bold focus:outline-none" onClick={onClick}>
-        •••
-      </button>
-
-      {isOpen && (
-        <div className="absolute right-0 mt-2 w-[150px] bg-white border border-gray-300 shadow-md z-10">
-          <ul className="list-none p-0 m-0">
-            <li className="p-2 text-base cursor-pointer hover:bg-gray-200" onClick={() => alert(`View clicked for item ${index}`)}>
-              View
-            </li>
-            <li className="p-2 text-base cursor-pointer hover:bg-gray-200" onClick={() => alert(`Download clicked for item ${index}`)}>
-              Download
-            </li>
-          </ul>
-        </div>
-      )}
-    </div>
-  );
-};
+import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios'; 
+import { useNavigate } from 'react-router-dom';
 
 const E_PerformancePage = () => {
-  
-  const [appraisalForms , setAppraisalForms] = useState([]);
   const [selectedYear, setSelectedYear] = useState(null);
   const [academicYears, setAcademicYears] = useState([]);
   const [openMenuIndex, setOpenMenuIndex] = useState(null);
-  const [file, setFile] = useState(null); 
-  // const [loading, setLoading] = useState(false);
-  // const [uploadStatus, setUploadStatus] = useState(null); 
-  const [userData, setUserData] = useState(null);
+  const [appraisals, setAppraisals] = useState(null);
+
   const employeeName = localStorage.getItem('empName');
+  const navigate = useNavigate();
+  const menuRef = useRef();
+
 
   useEffect(() => {
     const currentYear = new Date().getFullYear();
@@ -64,144 +26,146 @@ const E_PerformancePage = () => {
     setSelectedYear(`${defaultYear}-${defaultYear + 1}`);
   }, []);
 
-  // const handleMenuClick = (index) => {
-  //   setOpenMenuIndex(openMenuIndex === index ? null : index);
-  // };
+  
 
-  // useEffect(() => {
-  //   if (selectedYear) {
-  //     const startYear = parseInt(selectedYear.split('-')[0], 10);
-  //     const { start, end } = getAcademicYearRange(startYear);
-  //     const filtered = applications.filter((app) => {
-  //       const appDate = new Date(app.createdDate);
-  //       return appDate >= start && appDate <= end;
-  //     });
-
-  //     setFilteredApps(filtered);
-  //   }
-  // }, [selectedYear]);
-
-
-  const fetchAppraisalDetails = async (selectedYear) => {
-    console.log("Fetching data for year:", selectedYear);
-    const userId = localStorage.getItem('userId');
-    if (userId) {
-      const startYear = parseInt(selectedYear.split('-')[0], 10);
-      const endYear = startYear + 1;
-      
-      const startDate = new Date(`${startYear}-03-01`).toISOString().split('T')[0];  
-      const endDate = new Date(`${endYear}-04-30`).toISOString().split('T')[0];     
- 
-      
-      try {
-        const response = await axios.get(`http://localhost:3003/time/getTime/${startDate}/${endDate}`, {    
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        const formattedUserData = response.data.map(item => ({
-          ...item,
-          timePeriod: item.timePeriod.map(date => date.split('T')[0]),
-      }));
-
-      setUserData(formattedUserData);
-      
-      console.log("userdata", formattedUserData);  
-      console.log("userdata", userData);
-      } catch (error) {
-        console.error('Error fetching user details:', error);
-      }
-    } else {
-      console.log('User ID not found in local storage.');
-    }
-  };
   useEffect(() => {
     if (selectedYear) {
       fetchAppraisalDetails(selectedYear);
     }
   }, [selectedYear]);
 
- 
   const handleMenuClick = (index) => {
     setOpenMenuIndex(openMenuIndex === index ? null : index);
+  };
+
+  const handleCloseMenu = () => {
+    setOpenMenuIndex(null);
   };
 
   const handleYearChange = (e) => {
     const year = e.target.value;
     setSelectedYear(year);
-    fetchAppraisalDetails(year); 
-    console.log("Selected Year:", e.target.value);
+    fetchAppraisalDetails(year);
+  };
+
+
+  const fetchAppraisalDetails = async () => {
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      try {
+        const response = await axios.get(`http://localhost:3003/form/performance/${userId}`)
+        setAppraisals(response.data);
+        console.log('Fetched Appraisals in Performance Page :', response.data);
+      } catch (error) {
+        console.error('Error fetching appraisals in Performance page :', error)
+      }
+    }
+
+  }
+  useEffect(() => {
+    fetchAppraisalDetails()
+  }, []);
+
+  const handleViewClick = (appraisal) => {
+    console.log("Navigating to view");
+    const { userId, timePeriod } = appraisal;
+    navigate(`/empview?${userId}&${timePeriod[0]}&${timePeriod[1]}`);
+    handleCloseMenu(); 
   };
   
+  const formatDate = (isoString) => {
+    const date = new Date(isoString);
+    return date.toISOString().split('T')[0];
+  };
+
+  // Action Menu inside the main component
+  // const renderActionMenu = (index) => {
+  //   return (
+  //     <div className="absolute right-0 mt-2 w-[150px] bg-white border border-gray-300 shadow-md z-10">
+  //       <ul className="p-0 m-0">
+  //         <li className="p-2 text-base cursor-pointer hover:bg-gray-200" onClick={handleViewClick(appraisal)}>
+  //           View
+  //         </li>
+  //         <li
+  //           className="p-2 text-base cursor-pointer hover:bg-gray-200"
+  //           onClick={() => alert(`Download clicked for item`)}
+  //         >
+  //           Download
+  //         </li>
+  //       </ul>
+  //     </div>
+  //   );
+  // };
+
   return (
-    <div className='justify-center items-start mt-20 ml-28'>
-      <div>
-        <div>
-        <label className='ml-6 pl-4 rounded-lg py-1 p-1 bg-slate-100'>
-          <span htmlFor="time-period">Time Period:</span> 
-          <select
-            id="time-period"
-            value={selectedYear}
-            className='p-1 mb-10 bg-gray-100 rounded-lg'
-            onChange={handleYearChange}
-          >
-            {academicYears.map((year) => (
-              <option key={year} value={year}>
-                {year}
-              </option>
-            ))}
-          </select>
-        </label>
-          <br />
-     
-   <div className="w-11/12 p-4 bg-white border shadow-md rounded-md ml-4 mr-8">
-      <h2 className="text-2xl font-bold text-white bg-blue-500 p-2 rounded mb-4">Appraisals</h2>
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Employee name</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Time Period</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Initiated On</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Manager name</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Status</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Actions</th>
+    <div className="flex h-screen ml-6 mt-20 overflow-hidden">
+      <div className="flex-1 flex overflow-hidden">
+        <div className="flex-1 p-4 overflow-y-auto max-h-full">
+          {/* <label className="inline-block mb-4 p-2 bg-slate-100 rounded-lg">
+            <span htmlFor="time-period">Time Period:</span>
+            <select
+              id="time-period"
+              value={selectedYear}
+              className="ml-2 p-1 bg-gray-100 rounded-lg"
+              onChange={handleYearChange}
+            >
+              {academicYears.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+          </label> */}
+
+<div className="w-12/12 p-4 bg-white border shadow-md rounded-md ml-4 mr-8">
+<h2 className="text-2xl font-bold text-white bg-blue-500 p-2 rounded mb-4">Appraisal</h2>
+<table className="min-w-full divide-y divide-gray-200">
+<thead className="bg-gray-100">
+      <tr>
+        <th className="px-6 py-3 text-left text-xs font-medium text-gray-00 uppercase tracking-wider">Employee name</th>
+        <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Assessment Year</th>
+        <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Initiated On</th>
+        <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Manager name</th>
+        <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Status</th>
+        <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Actions</th>
+      </tr>
+    </thead>
+    <tbody className="bg-white divide-y divide-gray-200">
+      {appraisals && appraisals.length > 0 ? (
+        appraisals.map((appraisal, index) => (
+          <tr key={appraisal.userId} className="hover:bg-gray-50">
+            <td className="px-6 py-4 whitespace-nowrap font-medium text-sm  text-gray-500">
+              {employeeName}
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
+                      {formatDate(appraisal.timePeriod[0])} to {formatDate(appraisal.timePeriod[1])}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{formatDate(appraisal.timePeriod[0])}</td>
+            <td className="px-6 py-4 whitespace-nowrap font-medium  text-gray-500">
+              {appraisal.managerName}
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap font-medium text-sm  text-gray-500">
+              {appraisal.status}
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap font-medium text-sm  text-blue-900 hover:text-blue-700 cursor-pointer">
+            <button className='bg-blue-500 text-white hover:bg-blue-600 rounded-md px-2 py-2 w-16' onClick={() => handleViewClick(appraisal)}>View</button>
+            </td>
           </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {userData && userData.length > 0 ? (
-            userData.map((appraisal, index) => (
-              <tr key={appraisal.userId}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{employeeName}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
-                {appraisal.timePeriod && appraisal.timePeriod.length === 2
-                  ? `${appraisal.timePeriod[0]} - ${appraisal.timePeriod[1]}` : 'N/A'}      
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{appraisal.timePeriod[0]}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{appraisal.managerName}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">{appraisal.status}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-500 hover:text-blue-700 cursor-pointer">
-                  <ActionMenu
-                    isOpen={openMenuIndex === index}
-                    onClick={() => handleMenuClick(index)}
-                    index={index}
-                  />
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="6" className="px-6 py-4 text-center text-sm text-gray-500">
-                No appraisals found for this user.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
-        <br />
-        <br />
+        ))
+      ) : (
+        <tr>
+          <td colSpan="6" className="px-6 py-4 text-center text-gray-900">
+            No appraisals found for this user.
+          </td>
+        </tr>
+      )}
+    </tbody>
+  </table>
+</div>
+
+        </div>
+
       </div>
-    </div>
     </div>
   );
 };

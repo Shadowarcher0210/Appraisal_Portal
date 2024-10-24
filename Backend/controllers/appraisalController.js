@@ -1,3 +1,4 @@
+const mongoose = require('mongoose')
 const Appraisal = require('../models/Appraisal');
 const FormAnswers = require('../models/FormAnswers')
 const User = require('../models/User')
@@ -72,31 +73,31 @@ const saveAppraisalDetails = async (req, res) => {
                 return res.status(400).send({ error: 'Both start and end dates are required in the time period.' });
             }
 
-            const timePeriod = [
-                new Date(startDate).toISOString().split('T')[0], 
-                new Date(endDate).toISOString().split('T')[0]
-            ];
+            // const timePeriod = [
+            //     new Date(startDate).toISOString().split('T')[0], 
+            //     new Date(endDate).toISOString().split('T')[0]
+            // ];
             const user = await User.findOne({ _id: userId }, { empName: 1 });
             if (!user) {
                 return res.status(404).send({ error: 'User not found' });
             }
 
-            const saveForm = new FormAnswers({
-                userId,
-                pageData: pageData.map(({ questionId, answer }) => ({
-                    questionId,
-                    answer,
-                })),
-                timePeriod 
-            });
+            const updatedAppraisal = await Appraisal.findOneAndUpdate(
+                { userId: new mongoose.Types.ObjectId(userId) }, // Filter by userId
+                {pageData , status:'Submitted'},
+                {new:true}
+            )
 
-            const savedForm = await saveForm.save();
+            if (!updatedAppraisal) {
+                return res.status(404).json({ message: 'Appraisal form not found.' });
+            }
 
             res.status(201).send({
                 message: 'Appraisal form saved successfully!',
-                userId: savedForm.userId,
-                pageData: savedForm.pageData,
-                timePeriod: savedForm.timePeriod
+                // userId: savedForm.userId,
+                // pageData: savedForm.pageData,
+                // timePeriod: savedForm.timePeriod
+                data: updatedAppraisal
             });
         } catch (error) {
             console.log('Error saving appraisal form', error);
@@ -246,4 +247,148 @@ const getAppraisalAnswers = async (req, res) => {
     }
 };
 
-module.exports = {displayAppraisal, saveAppraisalDetails,updateAppraisalStatus, getAppraisals, getAppraisalAnswers}
+//for performance tab
+const getEmployeeAppraisal = async (req,res)=>{
+    try{
+        const {userId} = req.params;
+        const user = await User.findById(userId, '-password');
+        const statuses = ['Submitted','Under Review','Completed'];
+        const appraisals = await Appraisal.find({
+            userId,
+            status: { $in: statuses },
+            
+          });
+          if (!appraisals.length) {
+            return res.status(404).json({ message: 'No appraisals found.' });
+          }
+      
+          res.status(200).json(appraisals);
+    }catch(error){
+        console.error('Error fetching appraisals:', error);
+        res.status(500).json({ message: 'Server error', error });
+    }
+}
+
+//create appraisal
+    const createAppraisalForm = async (req,res)=>{
+        try{
+    const {userId ,managerName,timePeriod} = req.body;
+
+    if(!userId || !timePeriod || !managerName){
+        return res.status(400).json({message:'All required fiels must be provided.'})
+    }
+    const newAppraisal = new Appraisal({
+        userId,
+        timePeriod,
+        initiatedOn: new Date(), 
+        managerName,
+        status: 'To Do',
+        pageData: [],
+    });
+    const savedAppraisal = await newAppraisal.save();
+    res.status(201).json({ message: 'Appraisal form created successfully', data: savedAppraisal });
+
+        }catch(error){
+    console.error('Error in creating appraisal form :',error);
+    res.status(500).json({message:'Internal server error'})
+        }
+    }
+const sendExpiringAppraisalNotification = async (req, res) => {
+    const { userId, startDate } = req.params;
+    
+    try {
+        // Validate and parse start date
+        const startDateTime = new Date(startDate);
+        
+        if (isNaN(startDateTime.getTime())) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid date format. Please use YYYY-MM-DD format'
+            });
+        }
+        
+        // Calculate end date (start date + 1 year)
+        const endDateTime = new Date(startDateTime);
+        endDateTime.setFullYear(endDateTime.getFullYear() + 1);
+        
+        // Set time to start of day for comparison
+        startDateTime.setHours(0, 0, 0, 0);
+        endDateTime.setHours(0, 0, 0, 0);
+        
+        // Query for appraisal with calculated date range
+        const query = {
+            userId: userId,
+            $and: [
+                { 'timePeriod.0': {
+                    $gte: startDateTime,
+                    $lte: new Date(startDateTime.getTime() + 24 * 60 * 60 * 1000) // Include the entire day
+                }},
+                { 'timePeriod.1': {
+                    $gte: endDateTime,
+                    $lte: new Date(endDateTime.getTime() + 24 * 60 * 60 * 1000) // Include the entire day
+                }}
+            ]
+        };
+        
+        // Log the query for debugging
+        console.log('Checking appraisal for userId:', userId, 'with start date:', startDate);
+        console.log('Query:', JSON.stringify(query));
+        
+        const appraisal = await Appraisal.findOne(query).select({
+            timePeriod: 1,
+            userId: 1,
+            status: 1,
+            empScore: 1,
+            managerName: 1
+        });
+        
+        // Log the found appraisal for debugging
+        console.log('Found appraisal:', JSON.stringify(appraisal));
+        
+        if (!appraisal) {
+            return res.status(404).json({
+                success: false,
+                message: `No appraisal found for this user starting from ${startDate}`
+            });
+        }
+        
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        // Get the end date from the timePeriod array (second element)
+        const appraisalEndDate = new Date(appraisal.timePeriod[1]);
+        const formattedEndDate = appraisalEndDate.toISOString().split('T')[0];
+        
+        const timeDifference = appraisalEndDate - today;
+        const daysRemaining = Math.ceil(timeDifference / (1000 * 3600 * 24));
+        
+        let message = null;
+        if (daysRemaining <= 0) {
+            message = `Your appraisal has expired. End date was: ${formattedEndDate}`;
+        } else if (daysRemaining <= 10) {
+            message = `Your appraisal expires within ${daysRemaining} days. End date: ${formattedEndDate}`;
+        }
+        
+        return res.status(200).json({
+            message: message,
+        });
+        
+    } catch (error) {
+        console.error('Error checking appraisal expiration:', error);
+        
+        if (error.name === 'CastError') {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid user ID format'
+            });
+        }
+        
+        return res.status(500).json({
+            success: false,
+            message: 'Error checking appraisal expiration',
+            error: error.message
+        });
+    }
+};
+
+module.exports = {displayAppraisal, saveAppraisalDetails,updateAppraisalStatus, getAppraisals, getAppraisalAnswers, getEmployeeAppraisal,createAppraisalForm, sendExpiringAppraisalNotification}
