@@ -7,14 +7,14 @@ const registerUser = async (req, res) => {
     try {
         const { empName, email, password, doj, designation, department,band, gender, empType} = req.body;
 
-        // Validation
+       
         if (!empName || !email || !password || !doj || !designation || !department || !band || !gender || !empType ) {
             return res.status(500).send({
                 success: false,
                 message: 'Please provide all fields',
             });
         }
-        // Check if the user already exists
+     
         const existing = await UserModel.findOne({ email });
         if (existing) {
             return res.status(500).send({
@@ -50,7 +50,7 @@ const registerUser = async (req, res) => {
         console.log(error);
         res.status(500).send({
             success: false,
-        //message: 'Error in Register API',
+      
             error,
         });
     }
@@ -60,7 +60,7 @@ const loginUser = async(req,res)=>{
     try {
 
         const{email,password}=req.body
-        //validation
+      
         if(!email || !password){
             return req.status(500).send({
                 success:false,
@@ -68,7 +68,7 @@ const loginUser = async(req,res)=>{
             })
         }
 
-        //check user
+      
         const user = await UserModel.findOne({email})
         console.log(user)
         if(!user){

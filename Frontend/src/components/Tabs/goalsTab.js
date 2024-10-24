@@ -3,7 +3,7 @@ import React from 'react';
 
 const GoalsTab = ({ goalsResponse, handlePreviousForm, handleSubmit }) => {
   return (
-    <div className="relative h-full flex flex-col">
+    <div className="relative h-full flex flex-col overflow-y-auto max-h-[550px] scroll-th">
       <h1 className="font-semibold font-serif text-center text-2xl text-violet-800">
         Goals
       </h1>

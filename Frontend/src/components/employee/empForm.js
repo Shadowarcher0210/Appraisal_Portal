@@ -24,6 +24,9 @@ const EmpForm = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [isThankYouModalOpen, setIsThankYouModalOpen] = useState(false);
+ const [userDetails, setUserDetails] = useState(null);
+													   
+
   const location = useLocation();
   const { timePeriod } = location.state || {};
 
@@ -53,11 +56,14 @@ const EmpForm = () => {
     if (selfAppraisalPage > 0) {
       setSelfAppraisalPage(selfAppraisalPage - 1);
     } else if (activeTab > 0) {
+										   
       setActiveTab(activeTab - 1);
+    } else if(activeTab === 0){
+      navigate('/employee-dashboard')
     }
   };
 
-  const userDetails = async () => {
+  const fetchuserDetails = async () => {
     const userId = localStorage.getItem("userId");
     console.log("Retrieved userId:", userId);
 
@@ -66,6 +72,8 @@ const EmpForm = () => {
         const response = await axios.get(
           `http://localhost:3003/all/details/${userId}`
         );
+        setUserDetails(response.data.user);
+
         setEmail(response.data.user.email);
         console.log("email", response.data.user.email);
       } catch (error) {
@@ -78,11 +86,11 @@ const EmpForm = () => {
 
   useEffect(() => {
     console.log("useEffect called to fetch user details");
-    userDetails();
+    fetchuserDetails();
   }, []);
 
   const handleSubmit = async () => {
-    setIsModalOpen(true);
+		 setIsModalOpen(true);
   };
 
   const getAnswerFromWeight = (weight) => {
@@ -101,7 +109,39 @@ const EmpForm = () => {
         return "No Response";
     }
   };
-
+  const HorizontalStepper = ({ steps, activeStep, completedSteps }) => {
+    return (
+      <div className="flex justify-center items-center my-6">
+        {steps.map((step, index) => (
+          <div key={index} className="flex items-center">
+            <div className="flex flex-col items-center">
+            <div
+              className={`flex items-center justify-center h-8 w-8 rounded-full ${
+                index <= completedSteps ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-600'
+              }`}
+            >
+              {index + 1}
+            </div>
+            <span className="absolute mt-9">
+              {step}
+            </span>
+            </div>
+            {index < steps.length - 1 && (
+              <div
+                className={`flex-1 border-t-2 mx-2 ${
+                  index < completedSteps ? 'border-blue-500' : 'border-gray-300'
+                }`}
+                style={{ width: '300px' }} 
+              ></div>
+            )}
+          </div>
+        ))}
+        
+      </div>
+    );
+  };
+  
+ 
   const handleConfirmSubmit = async () => {
     setIsModalOpen(false);
     setIsThankYouModalOpen(true);
@@ -112,28 +152,94 @@ const EmpForm = () => {
       return;
     }
     const pageData = [
+      // General Questions
       {
         questionId: 1,
         question: "Job-Specific Knowledge: I possess and apply the expertise, experience, and background to achieve solid results.",
         answer: getAnswerFromWeight(weights[0]),
-
-
+        notes: notes[0]
       },
       {
         questionId: 2,
         question: "I work effectively and efficiently.",
         answer: getAnswerFromWeight(weights[1]),
-
-
+        notes: notes[1]
       },
       {
         questionId: 3,
         question: "Job-Specific Skills: I demonstrate the aptitude and competence to carry out my job responsibilities.",
         answer: getAnswerFromWeight(weights[2]),
-
-
+        notes: notes[2]
       },
-    ]
+    
+      // Competency Questions
+      {
+        questionId: 4,
+        question: "Adaptability: I am flexible and receptive regarding new ideas and approaches.",
+        answer: getAnswerFromWeight(weights[3]),
+        notes: notes[3]
+      },
+      {
+        questionId: 5,
+        question: "In response to the fluctuating demands of my job, I adapt easily to plans, goals, actions, and priorities.",
+        answer: getAnswerFromWeight(weights[4]),
+        notes: notes[4]
+      },
+      {
+        questionId: 6,
+        question: "Collaboration: I cultivate positive relationships. I am willing to learn from others.",
+        answer: getAnswerFromWeight(weights[5]),
+        notes: notes[5]
+      },
+      {
+        questionId: 7,
+        question: "Communication: I convey my thoughts clearly and respectfully.",
+        answer: getAnswerFromWeight(weights[6]),
+        notes: notes[6]
+      },
+      {
+        questionId: 8,
+        question: "I demonstrate effective listening skills.",
+        answer: getAnswerFromWeight(weights[7]),
+        notes: notes[7]
+      },
+      {
+        questionId: 9,
+        question: "Results: I identify goals that are aligned with the organization’s strategic direction and achieve results accordingly.",
+        answer: getAnswerFromWeight(weights[8]),
+        notes: notes[8]
+      },
+      {
+        questionId: 10,
+        question: "I persist through significant difficulties to achieve those goals.",
+        answer: getAnswerFromWeight(weights[9]),
+        notes: notes[9]
+      },
+      {
+        questionId: 11,
+        question: "Initiative: I anticipate needs, solve problems, and take action, all without explicit instructions.",
+        answer: getAnswerFromWeight(weights[10]),
+        notes: notes[10]
+      },
+      {
+        questionId: 12,
+        question: "I take the initiative to discover new work challenges and to help shape events that will lead to the organization’s success.",
+        answer: getAnswerFromWeight(weights[11]),
+        notes: notes[11]
+      },
+      {
+        questionId: 13,
+        question: "Development: I am committed to improving my knowledge and skills.",
+        answer: getAnswerFromWeight(weights[12]),
+        notes: notes[12]
+      },
+      {
+        questionId: 14,
+        question: "Growth: I am proactive in identifying areas for self-development.",
+        answer: getAnswerFromWeight(weights[13]),
+        notes: notes[13]
+      }
+    ];
     
 
     try {
@@ -141,6 +247,8 @@ const EmpForm = () => {
      
       const userId = localStorage.getItem('userId');
       const response = await fetch(`http://localhost:3003/form/saveDetails/${userId}/${timePeriod[0]}/${timePeriod[1]}`, {
+													  
+		 
         method: 'PUT',
         headers: {
           "content-Type": "application/json",
@@ -167,9 +275,7 @@ const EmpForm = () => {
       });
       const emailData = await emailresponse.json();
       console.log(emailData.message);
-
-
-     
+  
     } catch (error) {
       console.error('Error updating status:', error);
     }
@@ -192,7 +298,7 @@ const EmpForm = () => {
   };
 
   return (
-    <div className="flex h-screen ml-24 mt-16">
+    <div className="flex h-screen ml-4 mt-16">
       <div className="w-48 h-full bg-gray-100 p-4 fixed">
         <h2 className="text-lg font-bold mb-6">Forms</h2>
         <ul>
@@ -220,9 +326,32 @@ const EmpForm = () => {
           ))}
         </ul>
       </div>
-      <div className="flex-1 p-8 ml-44">
-        <div className="border p-4 rounded shadow-lg">
-          {activeTab === 0 && (
+      <div className="flex-1 p-8 ml-44 -mt-10 ">
+		 <HorizontalStepper
+          steps={TABS}
+          activeStep={activeTab}
+          completedSteps={completedSteps}
+        />				  
+					  
+	  <div className="border p-4 rounded mt-10 shadow-lg">
+				 {userDetails && (
+            <div className="mb-4 flex justify-between">
+              {/* <h3 className="text-xl font-bold text-blue-900">
+                Employee Details
+              </h3> */}
+              <p className="text-blue-900 text-xl">
+                <strong>Name:</strong> {userDetails.empName}
+              </p>
+              <p className="text-blue-900 text-xl">
+                <strong>Designation:</strong> {userDetails.designation}
+              </p>
+              <p className="text-blue-900 text-xl">
+              <strong>Band:</strong>{userDetails.band}
+              </p>
+            </div>
+          )}		   
+													   
+					 {activeTab === 0 && (
             <IntroductionTab
               handlePreviousForm={handlePreviousForm}
               handleContinue={handleContinue}

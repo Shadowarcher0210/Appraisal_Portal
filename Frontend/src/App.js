@@ -3,14 +3,13 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import Viewallappraisals from './components/Viewallappraisals.js';
 import ConfigureAppraisalForms from './components/hrManager/ConfigureAppraisalForms.js'; 
 import Header from './components/Header.js';
-import Leftnavbar from './components/Leftnavbar.js';
+
 import PerformancePage from './components/employee/empPerformance.js';
 import Login from './components/Login.js';
 import Profile from './components/Profile.js';
 import ForgotPassword from './components/ForgotPassword.js';
 import ResetPassword from './components/ResetPassword.js';
 import Dashboard from './components/employee/empDashboard.js';
-import EmpView from './components/employee/empView.js';
 import EmpViewPage from './components/employee/empViewPage.js';
 
 import EmpForm from './components/employee/empForm.js';
@@ -41,7 +40,6 @@ const App = () => {
 
           <Route path="/performance" element={<PerformancePage />} />
           <Route path="/configure-appraisal-forms" element={<ConfigureAppraisalForms />} />
-          <Route path="/view" element={<EmpView />} />
           <Route path="/empview" element={<EmpViewPage />} />
 
           <Route path="/employee-dashboard" element={<Dashboard />} />

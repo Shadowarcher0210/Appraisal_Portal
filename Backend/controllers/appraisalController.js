@@ -73,10 +73,7 @@ const saveAppraisalDetails = async (req, res) => {
                 return res.status(400).send({ error: 'Both start and end dates are required in the time period.' });
             }
 
-            // const timePeriod = [
-            //     new Date(startDate).toISOString().split('T')[0], 
-            //     new Date(endDate).toISOString().split('T')[0]
-            // ];
+           
             const user = await User.findOne({ _id: userId }, { empName: 1 });
             if (!user) {
                 return res.status(404).send({ error: 'User not found' });
@@ -94,9 +91,7 @@ const saveAppraisalDetails = async (req, res) => {
 
             res.status(201).send({
                 message: 'Appraisal form saved successfully!',
-                // userId: savedForm.userId,
-                // pageData: savedForm.pageData,
-                // timePeriod: savedForm.timePeriod
+               
                 data: updatedAppraisal
             });
         } catch (error) {

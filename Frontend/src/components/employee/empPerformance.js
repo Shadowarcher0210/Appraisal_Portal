@@ -63,7 +63,7 @@ const E_PerformancePage = () => {
 
   }
 
-
+  
   const handleViewClick = (appraisal) => {
     console.log("Navigating to view");
     const { userId, timePeriod } = appraisal;
